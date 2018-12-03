@@ -1,0 +1,34 @@
+ // 计算rem
+@function px2rem($px) {
+  $rem: 16;
+  @return ($px / $rem)+rem;
+}
+
+// 计算左右百分比
+@function transverse($px) {
+  @return percentage($px / 1920);
+}
+
+// 计算上下百分比
+@function vertical($px) {
+  @return percentage($px / 1080);
+}
+
+// 计算缩小比例后的高
+@function scale($px) {
+  @return ($px * (1080 / 1920));
+}
+
+//计算缩小的px
+@function scalePx($px) {
+  @return $px * (1500 / 1920);
+
+}
+.icon {
+  width: 1em; height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+  &:hover {
+  }
+}

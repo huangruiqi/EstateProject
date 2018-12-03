@@ -1,0 +1,7 @@
+<plugin name="soundinterface"
+			url="%SWFPATH%/music/soundinterface.swf"
+			alturl="%SWFPATH%/music/soundinterface.js"
+			rootpath=""
+			preload="true"
+			keep="true"
+			/>   

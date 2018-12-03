@@ -1,0 +1,155 @@
+{
+    "park": {
+        "name": "园林景观",
+        "toUrl":  "/nearBy/park",
+        "common": [
+            {
+                "houseTypeImage": {
+                    "id": 2,
+                    "roomTypeId": 2,
+                    "houseTypeId": 1,
+                    "imageKind": 2,
+                    "image": {
+                        "id": 2,
+                        "fileName": "2",
+                        "url": "./static/img/nearBy/2-1.png"
+                    }
+                },
+                "roomTypeName": "喷泉"
+            },
+            {
+                "houseTypeImage": {
+                    "id": 5,
+                    "roomTypeId": 2,
+                    "houseTypeId": 1,
+                    "imageKind": 2,
+                    "image": {
+                        "id": 5,
+                        "fileName": "5",
+                        "url": "./static/img/nearBy/2-2.png"
+                    }
+                },
+                "roomTypeName": "座椅"
+            },
+            {
+                "houseTypeImage": {
+                    "id": 5,
+                    "roomTypeId": 2,
+                    "houseTypeId": 1,
+                    "imageKind": 2,
+                    "image": {
+                        "id": 5,
+                        "fileName": "5",
+                        "url": "./static/img/nearBy/2-4.jpg"
+                    }
+                },
+                "roomTypeName": "凉泉"
+            },
+            {
+                "houseTypeImage": {
+                    "id": 5,
+                    "roomTypeId": 2,
+                    "houseTypeId": 1,
+                    "imageKind": 2,
+                    "image": {
+                        "id": 5,
+                        "fileName": "5",
+                        "url": "./static/img/nearBy/2-5.png"
+                    }
+                },
+                "roomTypeName": "湖景"
+            },
+            {
+                "houseTypeImage": {
+                    "id": 5,
+                    "roomTypeId": 2,
+                    "houseTypeId": 1,
+                    "imageKind": 2,
+                    "image": {
+                        "id": 5,
+                        "fileName": "5",
+                        "url": "./static/img/nearBy/2-5.png"
+                    }
+                },
+                "roomTypeName": "湖景"
+            }
+        ],
+        "park": [
+            {
+                "houseTypeImage": {
+                    "id": 2,
+                    "roomTypeId": 2,
+                    "houseTypeId": 1,
+                    "imageKind": 2,
+                    "image": {
+                        "id": 2,
+                        "fileName": "2",
+                        "url": "./static/img/nearBy/2-8.png"
+                    }
+                },
+                "roomTypeName": "公园"
+            },
+            {
+                "houseTypeImage": {
+                    "id": 5,
+                    "roomTypeId": 2,
+                    "houseTypeId": 1,
+                    "imageKind": 2,
+                    "image": {
+                        "id": 5,
+                        "fileName": "5",
+                        "url": "./static/img/nearBy/2-7.png"
+                    }
+                },
+                "roomTypeName": "景观"
+            },
+            {
+                "houseTypeImage": {
+                    "id": 5,
+                    "roomTypeId": 2,
+                    "houseTypeId": 1,
+                    "imageKind": 2,
+                    "image": {
+                        "id": 5,
+                        "fileName": "5",
+                        "url": "./static/img/nearBy/2-8.png"
+                    }
+                },
+                "roomTypeName": "景观"
+            },
+            {
+                "houseTypeImage": {
+                    "id": 5,
+                    "roomTypeId": 2,
+                    "houseTypeId": 1,
+                    "imageKind": 2,
+                    "image": {
+                        "id": 5,
+                        "fileName": "5",
+                        "url": "./static/img/nearBy/2-7.png"
+                    }
+                },
+                "roomTypeName": "景观"
+            },
+            {
+                "houseTypeImage": {
+                    "id": 5,
+                    "roomTypeId": 2,
+                    "houseTypeId": 1,
+                    "imageKind": 2,
+                    "image": {
+                        "id": 5,
+                        "fileName": "5",
+                        "url": "./static/img/nearBy/2-8.png"
+                    }
+                },
+                "roomTypeName": "景观"
+            }
+        ]
+    },
+    "near": {
+        "name": "周边设施",
+        "url": "./static/img/nearBy/3DMAP.jpg",
+        "toUrl": "/nearBy/neighberhood"
+    }
+}

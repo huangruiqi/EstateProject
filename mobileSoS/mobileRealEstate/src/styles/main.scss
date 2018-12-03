@@ -1,0 +1,31 @@
+//计算rem
+@function px2rem($px) {
+  $rem: 16;
+  @return ($px / $rem)+rem;
+}
+//计算左右百分比
+@function transverse($px) {
+  @return percentage($px / 1920);
+}
+//计算上下百分比
+@function vertical($px) {
+  @return percentage($px /1080);
+}
+@mixin px2rem($px, $content) {
+  $content: round($px/2)*1px;
+  [data-dpr='2'] & {
+    font-size: $px*1px;
+  } // for mx3
+  [data-dpr="2.5"] & {
+    font-size: round($px * 2.5 / 2) * 1px;
+  } // for 小米note
+  [data-dpr="2.75"] & {
+    font-size: round($px * 2.75 / 2) * 1px;
+  }
+  [data-dpr="3"] & {
+    font-size: round($px / 2 * 3) * 1px
+  } // for 三星note4
+  [data-dpr="4"] & {
+    font-size: $px * 2px;
+  }
+}

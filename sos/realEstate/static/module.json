@@ -1,0 +1,28 @@
+{
+    "moduleIndex": [
+        {
+            "name": "项目介绍",
+            "logo1": "./static/img/index/icon1.png",
+            "logo2": "./static/img/index/icon11.png",
+            "address": "/projectIntroduce"
+        },
+        {
+            "name": "品牌概况",
+            "logo1": "./static/img/index/icon2.png",
+            "logo2": "./static/img/index/icon22.png",
+            "address": "/brand"
+        },
+        {
+            "name": "户型展示",
+            "logo1": "./static/img/index/icon3.png",
+            "logo2": "./static/im g/index/icon33.png",
+            "address": "/houseType"
+        },
+        {
+            "name": "楼盘周边",
+            "logo1": "./static/img/index/icon4.png",
+            "logo2": "./static/img/index/icon44.png",
+            "address": "/nearBy"
+        }
+    ]
+}

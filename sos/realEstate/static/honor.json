@@ -1,0 +1,63 @@
+{
+  "statue": 1,
+  "message": null,
+  "data": {
+    "images": [
+      {
+        "id": null,
+        "imageKind": 1,
+        "image": {
+          "id": null,
+          "filePath": "http://localhost:8080/static/img/honor/honor1.png"
+        }
+      },
+      {
+        "id": null,
+        "imageKind": 1,
+        "image": {
+          "id": null,
+          "filePath": "http://localhost:8080/static/img/honor/honor2.jpg"
+        }
+      },
+      {
+        "id": null,
+        "imageKind": 1,
+        "image": {
+          "id": null,
+          "filePath": "http://localhost:8080/static/img/honor/honor3.jpg"
+        }
+      }
+    ],
+    "texts": [
+      {
+        "id": null,
+        "textKind": 1,
+        "content": "恒生指数份股[2007-2017年]"
+      },
+      {
+        "id": null,
+        "textKind": 1,
+        "content": "中国蓝筹地产企业[2004-2017年，连续14年]"
+      },
+      {
+        "id": null,
+        "textKind": 1,
+        "content": "2017年中海地产品牌价值评估达人民币598.45亿元"
+      },
+      {
+        "id": null,
+        "textKind": 1,
+        "content": "中国价值地产总评榜·年度企业公民"
+      },
+      {
+        "id": null,
+        "textKind": 1,
+        "content": "恒生可持续发展企业指数[2010-2017年]"
+      }
+    ],
+    "backgroundImage": {
+      "id": null,
+      "fileName": "http://localhost:8080/static/img/honor/background.jpg"
+    }
+  }
+}

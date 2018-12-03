@@ -1,0 +1,64 @@
+<krpano version="1.0.8">
+
+<!--小地图显示-->
+    <plugin name="xiaodt" url="%SWFPATH%/map/xiaomap.png"  
+           align="rightbottom"    zorder="20" keep="true"    
+           handcursor="true"  visible="true"  scale="0.6"  alpha="0.9"    x="10" y="50"   
+           onclick="action(openimagemap); set(plugin[xiaodt].visible,false); "  />
+
+<!--地图-->
+	 
+	 <!--imagemap start  X Y 控制位置变化--><!---->
+	<plugin name="imagemap" url="%SWFPATH%/map/map.png" keep="true"  
+	        visible="true"
+	        align="rightbottom" x="0"  y="50" scale="0.5" alpha="0.90" handcursor="false" 
+	        scalechildren="true"
+	        maskchildren="true"
+			zorder="0"
+			parent="map"
+            width="0"
+			height="0" 
+			onclick="action(openimagemap); "
+            />
+			
+ <action name="openimagemap">
+	   
+        set(plugin[imagemap].onclick,action(closeimagemap););
+		set(plugin[imagemap].visible,true); 
+        tween(plugin[imagemap].width,812,distance(812,1.0),easeoutquad);
+        tween(plugin[imagemap].height,540,distance(540,1.0),easeoutquad);
+		
+    </action>
+			
+	<action name="closeimagemap">
+	
+	set(plugin[xiaodt].visible,true);
+
+        set(plugin[imagemap].onclick,action(openimagemap); ); 
+        tween(plugin[imagemap].width,0,distance(812,1.5),easeoutquad); 
+        tween(plugin[imagemap].height,0,distance(540,1.5),easeoutquad); 
+    </action>
+		
+
+	 <!-- 地图上的扇形旋转图标radar plugin, set heading with "plugin[radar].heading" parent="imagemap容器对象" -->
+
+<plugin name="scene_1_1" url="%SWFPATH%/map/mappoint.png" 
+        keep="true" parent="imagemap" scale="0.40" align="righttop" edge="center" 
+        x="1000"  y="405" zorder="5" onhover="showtext(花园,STYLE2); " 
+        onclick="closeimagemap();  loadscene(scene_sun, null, MERGE, BLEND(1)); " />
+
+<plugin name="scene_2_2" url="%SWFPATH%/map/mappoint.png" 
+        keep="true" parent="imagemap" scale="0.40" align="righttop" edge="center" 
+        x="464"  y="279" zorder="5" onhover="showtext(客房,STYLE2); " 
+        onclick="closeimagemap();  loadscene(scene_timg_(1), null, MERGE, BLEND(1)); " />
+<plugin name="scene_2_3" url="%SWFPATH%/map/mappoint.png" 
+        keep="true" parent="imagemap" scale="0.40" align="righttop" edge="center" 
+        x="633"  y="471" zorder="5" onhover="showtext(客厅,STYLE2); " 
+        onclick="closeimagemap();  loadscene(scene_sun2, null, MERGE, BLEND(1)); " />
+<plugin name="scene_2_4" url="%SWFPATH%/map/mappoint.png" 
+        keep="true" parent="imagemap" scale="0.40" align="righttop" edge="center" 
+        x="687"  y="321" zorder="5" onhover="showtext(卧室,STYLE2); " 
+        onclick="closeimagemap();  loadscene(scene_timg, null, MERGE, BLEND(1)); " />
+
+<!-- 地图 END -->
+</krpano>

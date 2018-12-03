@@ -1,0 +1,46 @@
+{
+  "statue": 1,
+  "message": null,
+  "data": [
+    {
+      "id": 1,
+      "title": "源自香港 初步发展",
+      "content": "中国海外于1979年以100万港元在香港艰苦创业，以1984年香港前途明朗为契机，积极慎重涉足香港房地产业。",
+      "image": {
+        "filePath": "/static/img/develop/1.png"
+      },
+      "begin": 1979,
+      "end": 1991
+    },
+    {
+      "id": 3,
+      "title": "红筹上市 发展跨越",
+      "content": "1992年，公司在香港联交所上市，获得了充足资金，公司业务实现跨越式发展。",
+      "image": {
+        "filePath": "/static/img/develop/2.jpg"
+      },
+      "begin": 1992,
+      "end": 1997
+    },
+    {
+      "id": 5,
+      "title": "调整前行 转战内地",
+      "content": "公司顺应中国内地住宅商品化改革趋势，逐步将地产业务重心向内地转移。",
+      "image": {
+        "filePath": "/static/img/develop/3.png"
+      },
+      "begin": 1998,
+      "end": 2001
+    },
+    {
+      "id": 7,
+      "title": "全国布局 精耕细作",
+      "content": "公司进入高速发展阶段，实现了向全国性地产商的转型，并逐步成长为中国房地产行业领军企业之一。",
+      "image": {
+        "filePath": "/static/img/develop/4.jpg"
+      },
+      "begin": 2002,
+      "end": "至今"
+    }
+  ]
+}

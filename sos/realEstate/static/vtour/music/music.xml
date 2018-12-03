@@ -1,0 +1,17 @@
+<krpano version="1.0.8">
+
+<!--START:音乐控制需要在tiaoyong 粘贴插件-->
+	   <plugin name="soundinterface"
+				url="%SWFPATH%/music/soundinterface.swf"
+				alturl="%SWFPATH%/music/soundinterface.js"
+				rootpath=""
+				preload="true"
+				keep="true"
+				volume="1.0"
+				/>
+	<!--END:音乐控制-->
+
+
+		
+
+</krpano>

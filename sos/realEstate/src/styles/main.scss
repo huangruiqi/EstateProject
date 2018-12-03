@@ -1,0 +1,13 @@
+//计算rem
+@function px2rem($px) {
+  $rem: 16;
+  @return ($px / $rem)+rem;
+}
+//计算左右百分比
+@function transverse($px) {
+  @return percentage($px / 1920);
+}
+//计算上下百分比
+@function vertical($px) {
+  @return percentage($px /1080);
+}

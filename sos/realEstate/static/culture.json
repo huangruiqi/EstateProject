@@ -1,0 +1,58 @@
+{
+  "statue": 1,
+  "message": null,
+  "data": {
+    "backgroundImage": {
+      "id": null,
+      "filePath": "http://localhost:8080/static/img/culture/background.jpg"
+    },
+    "demonstrationImage": {
+      "id": null,
+      "filePath": "http://localhost:8080/static/img/culture/culture.png"
+    },
+    "title": [
+      {
+        "id": null,
+        "textKind": 2,
+        "content": "企业使命"
+      },
+      {
+        "id": null,
+        "textKind": 2,
+        "content": "品牌定位"
+      },
+      {
+        "id": null,
+        "textKind": 2,
+        "content": "价值观"
+      },
+      {
+        "id": null,
+        "textKind": 2,
+        "content": "企业愿景"
+      }
+    ],
+    "content": [
+      {
+        "id": null,
+        "textKind": 8,
+        "content": "拓展幸福空间创造无限价值"
+      },
+      {
+        "id": null,
+        "textKind": 8,
+        "content": "精品、生活、创造"
+      },
+      {
+        "id": null,
+        "textKind": 8,
+        "content": "正道笃行 创新致远"
+      },
+      {
+        "id": null,
+        "textKind": 8,
+        "content": "成为卓越的国际化不动产开发运营集团"
+      }
+    ]
+  }
+}
