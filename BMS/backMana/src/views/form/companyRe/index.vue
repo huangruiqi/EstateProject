@@ -222,17 +222,16 @@ export default {
 			}
 		},
 		videoChange() {
-			let video = document.getElementById(video)
-			console.log(video.value)
-			if (video.value !== null) {
-				this.videoMp4 = video.value
+			let video = document.getElementById('video');
+			if (video.value) {
+				this.videoMp4 = video.value;
 				this.$axios.post('/introduction/video', qs.stringify({
 					url: this.videoMp4
 				})).then(res => {
 					if (res.status == 200) {
 						alert("视频链接上传成功")
 						this.getData()
-						}
+					}
 				})
 			}
 		},

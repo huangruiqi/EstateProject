@@ -4,7 +4,7 @@
 <script>
 
 // const BASE_URL = 'http://47.106.120.37:8080/saleSystem'
-const BASE_URL = '/saleSystem'
+const BASE_URL = 'http://47.106.120.37:8080/saleSystem'
 
 export default {
   BASE_URL
