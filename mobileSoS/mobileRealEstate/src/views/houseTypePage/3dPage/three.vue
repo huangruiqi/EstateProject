@@ -118,7 +118,7 @@ export default {
     height: 100%;
     .pic {
         width: 100%;
-        height: px2rem(562);
+        height: 100%;
     }
 }
 </style>

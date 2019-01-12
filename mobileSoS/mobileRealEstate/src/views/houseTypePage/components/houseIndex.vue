@@ -233,7 +233,7 @@ export default {
     }
     .middle {
       width: 100%;
-      height: px2rem(641);
+      height: 60%;
       // background-color: #fff;
     }
     .bottom {

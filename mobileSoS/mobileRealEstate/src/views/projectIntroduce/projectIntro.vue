@@ -25,7 +25,7 @@ export default {
   created() {
     this.$axios.get('/project')
       .then(res=>{
-        this.backgroundImage = res.data.data.image.min
+        this.backgroundImage = res.data.data.image.fileName;
         this.words = res.data.data.introduction
     })
     this.$nextTick(()=>{
@@ -70,7 +70,7 @@ export default {
         width: 90%;
         height: 13rem;
         color: #fff;
-        @include fontSize(20);
+        @include fontSize(23);
         @include lineHeight(32);
         text-indent: 2em;
       }

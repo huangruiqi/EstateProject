@@ -25,7 +25,7 @@ export default {
             }else {
                 this.mapBig = res.data.data.nearDto.middle;
             }   
-            this.map = res.data.data.nearDto.min;
+            this.map = res.data.data.nearDto.url;
             // this.mapBig = res.data.data.nearDto.url;
         })
         .catch(error => {
