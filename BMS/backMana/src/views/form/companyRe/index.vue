@@ -137,7 +137,8 @@ export default {
 					this.content = res.data.data.content
 					this.changeImageNum = res.data.data.images.length
 					this.images = res.data.data.images
-					this.videoMp4 = res.data.data.videoUrl
+					// this.videoMp4 = res.data.data.videoUrl;
+					this.videoMp4 = 'http://play.video.qcloud.com/iplayer.html?$appid=1251035517&$fileid=14651978969511520829&$autoplay=0&$sw=1280&$sh=720';
 				})
 				.catch(error => {
 					console.log(error)
@@ -226,11 +227,11 @@ export default {
 			if (video.value) {
 				this.videoMp4 = video.value;
 				this.$axios.post('/introduction/video', qs.stringify({
-					url: this.videoMp4
+					url: video.value
 				})).then(res => {
 					if (res.status == 200) {
 						alert("视频链接上传成功")
-						this.getData()
+						// this.getData()
 					}
 				})
 			}

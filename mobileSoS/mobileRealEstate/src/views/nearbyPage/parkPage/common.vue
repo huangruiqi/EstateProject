@@ -20,7 +20,7 @@ export default {
     created() {
         this.$axios.get("/landscape/images")
         .then(res => {
-            this.map = res.data.data.nearDto.min;
+            this.map = res.data.data.nearDto.url;
         })
         .catch(error => {
             console.log(error);            
@@ -69,9 +69,14 @@ export default {
     height: 100%;
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    @include fj(center);
+    flex-direction: column;
+    align-items: center;   
     #targetObj {
+        // position: absolute;
+        // top: 30%;
+        height: px2rem(641);
         width: 100%;
-        height: 100%;
         z-index: 1;
     }
     #come {

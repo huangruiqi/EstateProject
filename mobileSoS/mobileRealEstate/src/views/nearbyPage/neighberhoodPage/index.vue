@@ -1,6 +1,6 @@
 <template>
-    <div class="content" style="position:relative;overflow: hidden;">
-        <img id="targetObj" class="target" style="position:relative;transform-origin:center" :src="map" />
+    <div class="content" :style="{position:relative;overflow: hidden;backgroundImage: url("+ map +")}" id="targetObj">
+        <!-- <img id="targetObj" class="target" :src="map" /> -->
         <img id="come" src="../../../assets/img/goHouseHistory/goHistory2.png" alt="" @click="goHistory()">
         <!-- <input type="button" value="重置" @click="reset()" > -->
     </div>  
@@ -22,8 +22,8 @@ export default {
         .then(res => {
             if (screen.width > 1024){
                 this.mapBig = res.data.data.nearDto.url;
-            }else {
-                this.mapBig = res.data.data.nearDto.middle;
+            }else { 
+                this.mapBig = res.data.data.nearDto.url;
             }   
             this.map = res.data.data.nearDto.url;
             // this.mapBig = res.data.data.nearDto.url;
@@ -34,18 +34,18 @@ export default {
     },
     mounted() {   
         // this.shuaXin();
-        let $targetObj = $('#targetObj');
-                //初始化设置
-        cat.touchjs.init($targetObj, function (left, top, scale, rotate) {
-        });
-                //拖拽
-        cat.touchjs.drag($targetObj, function (left, top) {
+        // let $targetObj = $('#targetObj');
+        //         //初始化设置
+        // cat.touchjs.init($targetObj, function (left, top, scale, rotate) {
+        // });
+        //         //拖拽
+        // cat.touchjs.drag($targetObj, function (left, top) {
                 
-        });
-                //缩放
-        cat.touchjs.scale($targetObj, function (scale) {
+        // });
+        //         //缩放
+        // cat.touchjs.scale($targetObj, function (scale) {
             
-        });
+        // });
                 //旋转
         // cat.touchjs.rotate($targetObj, function (rotate) {
                 
@@ -98,14 +98,15 @@ export default {
 
 .content {
     width: 100%;
-    height: 100%;
+    height: 50%;
     background-repeat: no-repeat;
-    background-size: 100% 100%;
+    // background-size: 100% 100%;
+    background-position:center;
     #targetObj {
-        width: 100%;
-        height: 100%;
+        // width: 80%;
         z-index: 1;
     }
+    
     .target {
         filter: blur(4px);
         transition: all 0.7s;
