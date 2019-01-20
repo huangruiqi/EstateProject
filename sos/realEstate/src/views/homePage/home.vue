@@ -2,12 +2,17 @@
   <div class="indexPage"  v-show="check" :style="{backgroundImage: 'url(' + imgIndexBack + ')'}" >
     <img :src="imgProject" alt="projectImg" class="projectImg">
     <div class="module">
+      <div class="smallNav" v-for="(m, a) in word" @click="skip(url[a])">
+        <img :src="icon[a]" alt="" class="navLogo">
+        <span>{{m}}</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import intial from '../../assets/img/index/loading.jpg';
+import getImage from '../../ultis/getImage.js'
 export default {
   data() {
     return {
@@ -16,26 +21,37 @@ export default {
       imgProBig: "",
       imgProject: '',
       moduleIndex: [],
+      word: ["项目介绍", "品牌概况", "户型展示", "楼盘周边"],
+      url: ["/projectIntroduce", "/brand", "/houseType", "/nearBy" ],
       check: 0,
-      icon: [require('../../assets/img/index/icon1.png'),require('../../assets/img/index/icon2.png'),require('../../assets/img/index/icon3.png'),require('../../assets/img/index/icon4.png')]
+      icon: []
     }
   },
   created() {
     //请求首页项目图片和背景图片
-    this.$axios.get("/mainpage")
+    this.$axios.get("/basic/mainPage/get")
     .then(res => {
       if (screen.width > 1024){
-        this.imgBig = res.data.data.backgroundImage.fileName;
-        this.imgProBig = res.data.data.projectImage.fileName;
+        this.imgBig = getImage(res.data.data.backgroundImageLocation, 1);
+        this.imgProBig = getImage(res.data.data.projectLogoLocation, 1);
       }else {
-        this.imgBig = res.data.data.backgroundImage.middle;
-        this.imgProBig = res.data.data.projectImage.middle;
+        this.imgBig = getImage(res.data.data.backgroundImageLocation, 2);
+        this.imgProBig = getImage(res.data.data.projectLogoLocation, 2);
       }
-      this.imgIndexBack = res.data.data.backgroundImage.min;
+      this.imgIndexBack = getImage(res.data.data.backgroundImageLocation, 5);
       // this.imgBig = res.data.data.backgroundImage.fileName;
-      this.imgProject = res.data.data.projectImage.min;
+      this.imgProject = getImage(res.data.data.projectLogoLocation, 5);
+      this.icon[0] = getImage(res.data.data.projectIntroductionBar, 1);
+      this.icon[1] = getImage(res.data.data.brandOverviewBar, 1);
+      this.icon[2] = getImage(res.data.data.unitDisplayBar, 1);
+      this.icon[3] = getImage(res.data.data.projectAroundBar, 1);
       // this.imgProBig = res.data.data.projectImage.fileName;
+      res.data.data && res.data.data.projectIntroductionBar ? this.icon[0] = getImage(res.data.data.projectIntroductionBar, 1) : "";
+      res.data.data && res.data.data.brandOverviewBar ? this.icon[1] = getImage(res.data.data.brandOverviewBar, 1) : "";
+      res.data.data && res.data.data.unitDisplayBar ? this.icon[2] = getImage(res.data.data.unitDisplayBar, 1) : "";
+      res.data.data && res.data.data.projectAroundBar ? this.icon[3] = getImage(res.data.data.projectAroundBar, 1) : "";
       this.check = 1;
+      // this.judgeModule();
     })
     .catch(error => {
       console.log(error);
@@ -43,14 +59,17 @@ export default {
 
     //请求激活的模块
     // http://192.168.43.127:8080/module/main
-    this.$axios.get("/module/main", {params:{'select':'true'}})
-    .then(res => {
-      this.moduleIndex = res.data.data;
-      // console.log(res.data);
-    })
-    .catch(error => {
-      console.log(error);
-    })
+    // this.$axios.get("/module/main", {params:{'select':'true'}})
+    // .then(res => {
+    //   this.moduleIndex = res.data.data;
+    //   // console.log(res.data);
+    // })
+    // .catch(error => {
+    //   console.log(error);
+    // })
+  },
+  mounted() {
+    // this.judgeModule();
   },
   methods: {
     //进行跳转页面
@@ -61,11 +80,12 @@ export default {
     judgeModule() {
       let moduleContent = "";//为module里面的内容
       let a = 0;
-      for (let moduleOne of this.moduleIndex) {
-        moduleContent += '<div class="smallNav"><img src="' + this.icon[a] + '" class="navLogo"><span>' + moduleOne.description + '</span></div>';
+      for (let moduleOne of this.word) {
+        moduleContent += '<div class="smallNav"><img src="' + this.icon[a] + '" class="navLogo"><span>' + moduleOne + '</span></div>';
         a++;
       }
       document.getElementsByClassName('module')[0].innerHTML = moduleContent;
+      this.hoverChange();
     },
     //导航移上去变logo
     hoverChange() {
@@ -74,7 +94,7 @@ export default {
       for (let i = 0; i < smallNav.length; i++) {
         smallNav[i].onclick = () => {
           // navLogo[i].src = this.moduleIndex[i].logo2;
-          this.skip( this.moduleIndex[i].url);
+          this.skip( this.url[i]);
           // console.log(navLogo[i].src);
         }
       }
@@ -85,10 +105,10 @@ export default {
   },
   watch: {
     //检测到数组有变化后就立即执行函数
-    moduleIndex() {
-      this.judgeModule();
-      this.hoverChange();
-    },
+    // moduleIndex() {
+    //   this.judgeModule();
+    //   this.hoverChange();
+    // },
     imgBig() {
       var ele = document.querySelector('.indexPage');
       var imgUrl = this.imgBig;
@@ -136,9 +156,9 @@ export default {
   // filter: blur(4px);
   transition: all 0.7s;
   .projectImg {
-    width: px2rem(601);
+    width: px2rem(357);
     @include cl();
-    top: vertical(204);
+    top: vertical(254);
     // filter: blur(4px);
     transition: all 0.7s;
   }
@@ -146,22 +166,28 @@ export default {
     filter: blur(0);
   }
   .module {
-    width: 62.8%;
-    height: px2rem(181);
+    width: transverse(1409);
+    height: vertical(290);
     @include cl();
-    top: vertical(768);
-    @include fj(space-around);
+    top: vertical(705);
+    @include fj();
     .smallNav {
       cursor: pointer;
-      @include fj(space-between);
+      @include fj(space-around);
       align-items: center;
       flex-direction: column;
+      width: px2rem(286);
+      height: px2rem(290);
+      padding: px2rem(41) px2rem(75) px2rem(41) px2rem(75);
       img {
-        width: px2rem(92);
+        width: px2rem(136);
       }
       span {
-        @include sc(px2rem(40));
+        @include sc(px2rem(34));
       }
+    }
+    .smallNav:hover {
+      background-color: rgba(205,182,151,0.25);
     }
   }
 }

@@ -1,12 +1,17 @@
 <template>
   <div class="all">
     <router-view/>
+    <!-- <top></top> -->
   </div>
 </template>
 
 <script>
+  import top from '@/components/topOption'
 export default {
-  name: 'all'
+  name: 'all',
+  components: {
+    top: top
+  }
 }
 </script>
 

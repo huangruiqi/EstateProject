@@ -3,9 +3,9 @@
         <!-- :style="{backgroundColor: bottomNavColor}" -->
         <div class="chooseType" >
             <div class="chooseSmall">
-                <div :class="typeClassOne" @click="changePic()" id="typeClass"><router-link to='/houseType/prototype'>样板间</router-link></div>
-                <div :class="typeClassTwo" @click="changePicA()" id="typeClassTwo"><router-link to='/houseType/plan'>平面图</router-link></div>
-                <div :class="typeClassThree" @click="changePicA()"  id="typeClassThree"><router-link to='/houseType/three'>全景展示</router-link></div>
+                <div :class="typeClassOne"  id="typeClass" :style="{display: vrDisplay}"><router-link to='/houseType/prototype'>样板间</router-link></div>
+                <div :class="typeClassTwo"  id="typeClassTwo" :style="{display: vrDisplay}"><router-link to='/houseType/plan'>平面图</router-link></div>
+                <div :class="typeClassThree"  id="typeClassThree" :style="{display: vrDisplay}"><router-link to='/houseType/three'>全景展示</router-link></div>
             </div>
         </div>
     </div>
@@ -19,20 +19,20 @@ export default {
         "typeClassTwo": this.typeClassChangeTwo,
         "typeClassThree": this.typeClassChangeThree,
         "bottomNavColor": this.bottomNavColorChange,
-        "house": {}
+        "house": {},
+        "vrDisplay": "none"
       }
   },
   created() {
-      this.$axios.get("/house/housetype")
-            .then(res => {
-                this.house = res.data.data;
-                if (!this.house[0].houseType.vrUrl) {
-                    document.getElementById('typeClassThree').style.display = 'none';
-                    document.getElementsByClassName('chooseSmall')[0].style.width = '28%';
-
-                }
-            })
-            .catch(error => {
+        this.$axios.get("/house/houseType/get")
+        .then(res => {
+            this.house = res.data.data;
+        //     if (!this.house[0].houseTypeVrUrl) {
+        //         document.getElementById('typeClassThree').style.display = 'none';
+        //         document.getElementsByClassName('chooseSmall')[0].style.width = '20%';
+        //     }
+        })
+        .catch(error => {
             console.log(error);
         });
   },
@@ -44,55 +44,45 @@ export default {
             document.getElementById('typeClassTwo').click();
         });
         this.$on('checkVR', (val, cate) => { 
-            // console.log(cate);
-            if(this.house[val] && !this.house[val].houseType.vrUrl) {
-                $('#typeClassThree').css('display', 'none');
-                if (cate == 2) {
-                // $('#typeClassTwo').click();
-                // this.$router.push({path:'/houseType/plan', 
-                // });
-                // this.$router.push('/houseType/plan');
-                }else if (cate == 1) {
-                // $('#typeClass').click();
-                // this.$router.push({path:'/houseType/protoType', 
-                // });
-                // this.$router.push('/houseType/protoType');
-                }else {
-                $('#typeClassTwo').click();
-                this.$router.push({path:'/houseType/plan', 
-                });    
-                // this.$router.push('/houseType/plan');      
-                }
-                // $('.houseEvery').eq(val).click();
-                // this.$router.push('/houseType/plan');
-                document.getElementsByClassName('chooseSmall')[0].style.width = '20%';
-            }else {
+            if(this.house[val] && this.house[val].houseTypeVrUrl) {
                 $('#typeClassThree').css('display', 'flex');
-                document.getElementsByClassName('chooseSmall')[0].style.width = '32.06%';
+                $('#typeClassTwo').css('display', 'flex');
+                $('#typeClass').css('display', 'flex');
+                // document.getElementsByClassName('chooseSmall')[0].style.width = '32.06%';
+            }else if (this.house[val] && !this.house[val].houseTypeVrUrl) {
+                if (cate == 2) {
+
+                }else if (cate == 1) {
+
+                }else {
+                    $('#typeClassTwo').click();
+                    this.$router.push({
+                        name:'plan',
+                        params: {
+                            houseNum: val
+                        }
+                    });  
+                }
+                $('#typeClassTwo').css('display', 'flex');
+                $('#typeClass').css('display', 'flex');
+                $('#typeClassThree').css('display', 'none');
+                // document.getElementsByClassName('chooseSmall')[0].style.width = '20%';
             }
-            // alert(val);
-            // if(this.house[val].houseType.vrUrl) {
-            //     document.getElementById('typeClassThree').style.display = 'block';
-            //     document.getElementsByClassName('chooseSmall')[0].style.width = '32.06%';
-            // }else {
-            //     document.getElementById('typeClassThree').style.display = 'none';
-            //     document.getElementsByClassName('chooseSmall')[0].style.width = '20%';
-            // }
         });
 
   },
   methods: {
       //切换图的类型
-      changePic() {
-          document.getElementById('chooseType').style.display = 'block';
-          this.$emit('changeCate');
-      },
-      changePicA() {
-          document.getElementById('chooseType').style.display = 'flex';
-          document.getElementsByClassName('chooseType')[0].style.marginLeft = 0;
-          document.getElementById('chooseType').style.justifyContent = 'center';
-          this.$emit('changeCate');
-      }
+        changePic() {
+            document.getElementById('chooseType').style.display = 'block';
+            this.$emit('changeCate');
+        },
+        changePicA() {
+            document.getElementById('chooseType').style.display = 'flex';
+            document.getElementsByClassName('chooseType')[0].style.marginLeft = 0;
+            document.getElementById('chooseType').style.justifyContent = 'center';
+            this.$emit('changeCate');
+        }
   },
   props: ['typeClassChange', 'bottomNavColorChange', "typeClassChangeTwo", "typeClassChangeThree"]
 }
@@ -101,33 +91,35 @@ export default {
 @import '../../../../styles/main.scss';
 @import '../../../../styles/mixin.scss';
 
-// .bottomNavA {
-//     width: 100%;
-//     height: vertical(175);
-//     @include fj(center);
-// }
 .bottomNav {
     width: 100%;
     height: vertical(175);
+    // @include fj(center);
+    margin-left: transverse(95);
     // background-color: #fff;
     .chooseType {
         width: px2rem(1098);
-        height: px2rem(86);
-        margin-left: transverse(121);
-        @include fj(center);
+        height: px2rem(84);
+        margin-top: px2rem(56);
+        // margin-left: transverse(121);
+        // @include fj(center);
         // background-color: black;
         .chooseSmall {
-            width: 32.06%;
+            // width: 32.06%;
             height: 100%;
-            @include fj();
-            align-items: flex-end;
+            // @include fj();
+            // align-items: flex-end;
             // background-color: white;
             div {
-                width: px2rem(90);
-                height: px2rem(40);
+                float: left;
+                width: px2rem(180);
+                height: px2rem(63);
                 @include fj(center);
                 align-items: center;
                 cursor: pointer;
+                // background-color: #c1c1c1;
+	            border: solid px2rem(2) #666666;
+                margin-left: px2rem(123);
                 a {
                     width: 100%;
                     height: 100%;
@@ -135,31 +127,41 @@ export default {
                     align-items: center;
                 }
             }
+            div:first-of-type {
+                margin-left: 0;
+            }
             .noActive {
-                border: px2rem(1) solid #fdbAAA;
-                background-color: #121212;
+                border: solid px2rem(2) #666666;
+                // background-color: #c1c1c1;
                 a {
-                    @include sc(px2rem(20));
+                    @include sc(px2rem(30), #666666);
+                    text-decoration: none;
                 }
             }
             .noActiveTwo {
-                border: px2rem(1) solid #757575;
+                border: solid px2rem(2) #666666;
+                // background-color: #c1c1c1;
                 a {
-                    @include sc(px2rem(20), #757575);
+                    @include sc(px2rem(30), #666666);
+                    text-decoration: none;
                 }
             }
             .active {
-                background-color: #FFDAAA;
-                border: px2rem(1) solid #121212;
+                background-color: #c7ad8c;
+                // border: px2rem(1) solid #121212;
+                border: px2rem(1) solid #c7ad8c;
                 a {
-                    @include sc(px2rem(20), #121212);
+                    @include sc(px2rem(30), white);
+                    text-decoration: none;
                 }    
             }
             .activeTwo {
-                background-color: #757575;
-                border: px2rem(1) solid #757575;
+                background-color: #c7ad8c;
+                border: px2rem(1) solid #c7ad8c;
+                // border: px2rem(1) solid #757575;
                 a {
-                    @include sc(px2rem(20), white);
+                    @include sc(px2rem(30), white);
+                    text-decoration: none;
                 } 
             }
         }

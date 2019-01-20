@@ -45,13 +45,14 @@ export default {
 #nearType{
   width: 100%;
   height: 100%;
-  background-color: #202020;
+  // background-color: #202020;
   @include fj(space-between);
   flex-direction: column;
   align-items: center;
   .header {
     width: 100%;
-    height: percentage(1085/1206);
+    // flex: 1;
+    height: 92.2%;
     position: relative;
     // img {
     //   width: px2rem(64);
@@ -67,9 +68,12 @@ export default {
   //   background-color: #fff;
   // }
   .bottom {
+ 
     width: 100%;
-    height: percentage(121/1206);
-    border-top: px2rem(2) solid #ffdaaa;
+    height: 7.8%;
+    background-color: #ffffff;
+    box-shadow: 0px px2rem(11) px2rem(36) px2rem(3) rgba(29, 35, 40, 0.2);
+    z-index: 1;
   }
 }
 </style>

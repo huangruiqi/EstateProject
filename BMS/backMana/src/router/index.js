@@ -33,7 +33,23 @@ export const constantRouterMap = [
       requireAuth: true,
     },
   },
-
+  // {  
+  //   path: '/proSelect',
+  //   component: Layout,            
+  //   meta: {
+  //     requireAuth: true,
+  //   },
+  //   redirect: '/proSelect/index',
+  //   children: [{
+  //     path: 'index',
+  //     name: 'proSelect',
+  //     component: () => import('@/views/projectSelect/index'),
+  //     meta: {
+  //       title: '项目选择',
+  //       icon: 'table'
+  //     }
+  //   }]
+  // },
   {
     path: '/guidePage',
     component: Layout,
@@ -51,15 +67,20 @@ export const constantRouterMap = [
   {
     path: '/homePage',
     component: Layout,
-    redirect: '/homePage',
-    meta: {
-      requireAuth: true,
-    },
+    name: 'index',
+    redirect: '/homePage/index',
+    meta: { title: '首页管理', icon: 'home' },
     children: [{
       path: 'index',
       name: 'homePage',
       component: () => import('@/views/homepage/index'),
-      meta: { title: '首页管理', icon: 'home' }
+      meta: { title: '电脑端', icon: 'form' }
+    },
+    {
+      path: 'mobile',
+      name: 'mobile',
+      component: () => import('@/views/homepage/mobile'),
+      meta: { title: '移动端', icon: 'form' }
     }]
   },
   {
@@ -74,7 +95,7 @@ export const constantRouterMap = [
       {
         path: 'index',
         name: 'Table',
-        component: () => import('@/views/houseDis/table/index'),
+        component: () => import('@/views/houseDis/index'),
         meta: { title: '户型展示', icon: 'project' }
       }
     ]
@@ -84,7 +105,7 @@ export const constantRouterMap = [
     path: '/company',
     name: 'Form',
     component: Layout,
-    redirct: './company/comapnyRe',
+    redirect: './company/comapnyRe',
     meta: { title: '品牌概况', icon: 'brand' },
     children: [
       {
@@ -116,8 +137,9 @@ export const constantRouterMap = [
   {
     path: '/proInt',
     component: Layout,
+    redirect: '/proInt/index',
     meta: {
-      requireAuth: true,
+      requireAuth: true
     },
     children: [
       {
@@ -149,7 +171,23 @@ export const constantRouterMap = [
       }
     ]
   },
-
+  {
+    path: '/proManage',
+    component: Layout,
+    meta: {
+      requireAuth: true,
+    },
+    redirect: '/proManage/index',
+    children: [
+      {
+        path: 'index',
+        name: 'proManage',
+        component: () => import('@/views/projectManage/index'),
+        meta: { title: '项目管理', icon: 'table' }
+      }
+    ]
+  },
+  
   { path: '*', redirect: '/404', hidden: true }
 ]
 

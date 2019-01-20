@@ -52,11 +52,11 @@ export default {
   height: 100%;
   display: flex;
   .leftContent {
-    width: transverse(300);
+    width: transverse(260);
     height: 100%;
   }
   .rightContent {
-    width: transverse(1920 - 300);
+    width: transverse(1920 - 260);
     height: 100%;
   }
 }

@@ -1,11 +1,11 @@
 <template>
-    <div class="content">
+    <div class="content" >
         <div class="changePosition">
             <div class="topHouse">
                 <img src="../../../assets/img/goHouseHistory/goHistory.png" @click="goHistory()">
             </div>
             <div class="middleHouse">
-                <div class="bigPic" :style="{backgroundImage: 'url(' + picUrl + ')'}">
+                <div class="bigPic" :style="{backgroundImage: 'url(' + picUrlMin + ')'}">
 
                 </div>
                 <right @event='getPicUrl' @eventB='checkEffect' @checkVR='checkVR' @haha='haha' :intial=1 ref="rightA"></right>
@@ -13,13 +13,17 @@
         </div>
         <!-- 传给子组件值 -->
         <bottom ref="bottom" @changeCate='changeCate' :typeClassChange='typeClassChange' :typeClassChangeThree='typeClassChangeTwo' :typeClassChangeTwo='typeClassChangeTwo' ></bottom>
+        <contact @haveCon='haveCon'></contact>
+        <contact-content @closeInfo='closeInfo' :style='{display: conDisplay}'></contact-content>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
 import bottom from '../components/navBar/bottomNavBar'
 import right from "../components/navBar/rightNavBar";
-
+import getImage from '../../../ultis/getImage.js'
+import contact from '../../../components/haveContact'
+import contactContent from '../../../components/contactContent'
 export default {
     data() {
         return {
@@ -30,7 +34,10 @@ export default {
             housePlans: [],
             intial: 1,
             val: 0,
-            check: 0
+            check: 0,
+            picUrlMin: '',
+            picUrlBig: '',
+            conDisplay: 'none'
         }
     },
     mounted(){
@@ -61,19 +68,22 @@ export default {
         getPicUrl(clickUrl) {
             // this.check++;
             this.picUrl = clickUrl;
+            this.picUrlMin = getImage(clickUrl, 5);
+            if (screen.width > 1024) {
+                this.picUrlBig = getImage(clickUrl, 1);
+            } else {
+                this.picUrlBig = getImage(clickUrl, 2);
+            }
         },
         chuFa(val, val2) {
             this.$refs.rightA.$emit('changeHouse', val, val2);
         },
         changeCate() {
-            // this.$emit("changeCate");
-            // this.$on('bridgeThree', (val) => {
+            
             this.$refs.rightA.$emit('changeHouse2', this.val);
             // });
         },
         haha() {
-            // this.$emit('haha');
-            // alert(33);
             document.getElementsByClassName('bigPic')[0].setAttribute('class', 'bigPic');
         },
         checkEffect() {
@@ -84,11 +94,38 @@ export default {
             window.onload = () => {
                 this.$router.replace("/index"); 
             }
-        }  
+        }  ,
+        haveCon() {
+            this.conDisplay = 'flex';
+            this.$forceUpdate();
+        },
+        closeInfo() {
+            this.conDisplay = 'none';
+            this.$forceUpdate();
+        },
     },
     components: {
         bottom,
-        right
+        right,
+        contact,
+        contactContent
+    },
+    watch: {
+        picUrl() {
+            var ele = document.querySelector('.bigPic');
+            var imgUrl = this.picUrlBig;
+            var imgObject = new Image();
+
+            imgObject.src = imgUrl;
+            imgObject.onload = function () {
+                this.imgBack = imgUrl;
+                // console.log(this.imgProjectBack);
+                ele.style.backgroundImage = 'url(' + this.imgBack + ')';
+                // $('#muluguanli').css('background','url(res/skin/dist/img/zongheguanli_bg.png)  no-repeat');
+                ele.setAttribute('class', 'bigPic complete');
+                
+            }           
+        }
     }
 }
 </script>
@@ -100,36 +137,38 @@ export default {
 .content {
     width: 100%;
     height: 100%;
-    background-color: #1E1E1E;
+    background-color: #D7D7D7;
+    background-image: url('../../../assets/img/goHouseHistory/houseBack.jpg');
     .changePosition {
         width: 100%;
         height: vertical(905);
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
+        // display: flex;
+        // flex-direction: column;
+        // justify-content: flex-end;
         .topHouse {
-            width: 100%;
-            height: percentage(140 / 905);
-            z-index: 1;
+            height: vertical(117);
+            position: absolute;
+            display: flex;
+            align-items: flex-end;
+            right: px2rem(95);
             img {
-                width: px2rem(57);
-                height: px2rem(50);
-                margin-top: px2rem(48);
-                margin-left: percentage(1503 / 1620);
+                width: px2rem(63);
+                height: px2rem(57);
                 cursor: pointer;
             }
         }
         .middleHouse {
             width: 100%;
-            height: percentage(765 / 905);
+            height: percentage(725 / 905);
             display: flex;
             align-items: center;
+            margin-top: px2rem(167);
             // background-color: white;
             .bigPic {
-                width: px2rem(1098);
+                width: px2rem(1107);
                 height: 100%;
-                margin-left: transverse(121);
-                border: px2rem(2) solid $colorAll;
+                margin-left: transverse(95);
+                border: px2rem(6) solid white;
                 background-repeat: no-repeat;
                 background-size: percentage(1094 / 1098) percentage(761 / 765);
                 filter: blur(10px);
@@ -141,5 +180,8 @@ export default {
         }
     }
 }
+.complete {
+    filter: blur(0);
+} 
 
 </style>

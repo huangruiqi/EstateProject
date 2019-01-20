@@ -37,4 +37,8 @@ export default {
 .exact-active-class {
   background-color: #001528;
 }
+
+#app .main-container {
+  position: relative;
+}
 </style>

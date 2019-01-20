@@ -10,7 +10,8 @@
       </div>
       <form action="" id="loginUser" ref="loginForm">
         <input id="username" name="username" type="text" v-model.trim="userInfo.username" placeholder="请输入用户名">
-        <input id="password" name="password" type="password" v-model="userInfo.password" placeholder="请输入密码" @keyup.enter="handleLogin">
+        <input id="password" name="password" type="password" v-model="userInfo.password" placeholder="请输入密码"
+               @keyup.enter="handleLogin">
       </form>
       <div class="loginInBottom">
         <input type="submit" value="登录" @click="handleLogin">
@@ -22,16 +23,19 @@
   </div>
 </template>
 <style lang="scss" scoped>
-@import "../../styles/main";
-@import "../../styles/mixin";
+  @import "../../styles/main";
+  @import "../../styles/mixin";
+
   .loginIn {
     width: 100%;
     height: 100%;
     overflow: hidden;
     position: relative;
+
     .loginInTop {
       width: 100%;
       height: px2rem(740);
+
       img {
         width: 100%;
         height: 100%;
@@ -47,8 +51,7 @@
       bottom: 0;
       margin: auto;
       background-color: #ffffff;
-      box-shadow: 3px 5px 9px 0px 
-        rgba(0, 0, 0, 0.06);
+      box-shadow: 3px 5px 9px 0px rgba(0, 0, 0, 0.06);
       border-radius: 2px;
       @include fj(center);
       flex-direction: column;
@@ -73,15 +76,18 @@
         width: px2rem(360);
         height: px2rem(200);
         margin-top: px2rem(20);
+
         #username, #password {
           width: 100%;
           height: px2rem(65);
-	        border: solid 2px #e5e5e5;
+          border: solid 2px #e5e5e5;
           margin-top: px2rem(28);
         }
+
         input:focus {
           border: solid 2px #3aa7ff;
         }
+
         label {
           width: px2rem(115);
           height: px2rem(20);
@@ -104,13 +110,15 @@
           height: 100%;
           color: #fff;
           background-color: #3aa7ff;
-	        border-radius: 2px;
+          border-radius: 2px;
         }
       }
     }
+
     .loginBottom {
       width: 100%;
       @include fj(center);
+
       img {
         width: px2rem(230);
         height: px2rem(45);
@@ -121,68 +129,59 @@
   }
 </style>
 <script>
-import qs from 'qs'
-export default {
-  name: 'login',
-  data() {
-    return {
-      userInfo: {
-        username: '',
-        password: ''
-      }
-    }
-  },
-  methods: {
-    handleLogin() {
-      if (this.userInfo.username == '') {
-        alert('用户名不能为空！');
-        return false
-      }
-      if (this.userInfo.password == '') {
-        alert('密码名不能为空');
-        return false
-      }
-      this.$axios.get('/login/status')
-        .then(res => {
-          this.$store.loginStatus = res.data.statue
-          // console.log(this.$store.loginStatus, res.data)
-        })
-      this.$axios.post('/login', qs.stringify(
-        {
-          count: this.userInfo.username,
-          password: this.userInfo.password
+  import qs from 'qs'
+
+  export default {
+    name: 'login',
+    data() {
+      return {
+        userInfo: {
+          username: '',
+          password: ''
         }
-      ))
-        .then(res => {
-          this.$store.state.user.loginStatus = res.data.statue
-          console.log(this.$store.state.user.loginStatus = res.data.statue)
-          if (res.data.statue == 1) {
-            this.loading = true
-            this.$store.dispatch('Login', this.userInfo).then(() => {
-              this.loading = false
-              this.$router.push({ path: '/' })
-            }).catch(() => {
-              this.loading = false
-            })
-            // this.$store.commit('setToken', res.data);
-            // localStorage.userName = this.userInfo.userName;
-            // // localStorage.token_expire = res.data.expire;
-            // localStorage.token = res.data.token;
-            // this.$notify({
-            //   title : '提示信息',
-            //   message : '登录成功',
-            //   type : 'success'
-            // });
-            // this.$router.push({path:'/'})
-          }else {
-            this.$notify({
-              title : '提示信息',
-              message : '账号或密码错误',
-              type : 'error'
-            });
+      }
+    },
+    methods: {
+      handleLogin() {
+        if (this.userInfo.username === '') {
+          alert('用户名不能为空！')
+          return false
+        }
+        if (this.userInfo.password === '') {
+          alert('密码名不能为空')
+          return false
+        }
+        this.$axios.post('/user/login', qs.stringify(
+          {
+            count: this.userInfo.username,
+            password: this.userInfo.password
           }
-        })
+        ))
+          .then(res => {
+            res.data.code = 1
+            this.$store.state.user.loginStatus = res.data.code
+            if (res.data.code === 1) {
+              this.loading = true
+              this.$store.dispatch('Login', this.userInfo).then(() => {
+                this.loading = false
+                this.$router.push({ path: '/' })
+              }).catch(() => {
+                this.loading = false
+              })
+              this.$notify({
+                title: '提示信息',
+                message: '登录成功',
+                type: 'success'
+              })
+            } else {
+              this.$notify({
+                title: '提示信息',
+                message: '账号或密码错误',
+                type: 'error'
+              })
+            }
+          })
+      }
     }
   }
-}
 </script>

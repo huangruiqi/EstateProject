@@ -16,6 +16,7 @@ import './ultis/global'
 import VueLazyComponent from '@xunlei/vue-lazy-component'
 import VueLazyload from 'vue-lazyload'
 import pic from './assets/img/index/loading.jpg'
+import Contact from './components/haveContact'
 // import './styles/mixin.scss'
 
 
@@ -42,6 +43,6 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
-  components: { App },
+  components: { App, Contact},
   template: '<App/>'
 })

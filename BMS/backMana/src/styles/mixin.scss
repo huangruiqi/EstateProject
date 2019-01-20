@@ -1,4 +1,4 @@
-$colorAll: #ffdba1;
+$colorAll: #666666;
 
 @mixin clearfix {
   &:after {
@@ -37,6 +37,49 @@ $colorAll: #ffdba1;
 @mixin fj($type: space-between) {
   display: flex;
   justify-content: $type;
+}
+@mixin scrollBarTwo {
+  &::-webkit-scrollbar-track-piece {
+    overflow-x: hidden;
+    background: #fff;
+  }
+
+  &::-webkit-scrollbar-button {
+    background: #dadbdd;
+    width: 18px;
+    height: 18px;
+    display: none;
+    // border: 1px solid white;
+  }
+
+  &::-webkit-scrollbar-button:vertical:start:increment {
+
+    //横向 开始端 增量按钮
+    display: none;
+  }
+
+  &::-webkit-scrollbar-button:vertical:end:decrement {
+
+    //横向 末尾端 减量按钮
+    display: none;
+  }
+
+
+  &::-webkit-scrollbar {
+    width: px2rem(6);
+    overflow-x: hidden;
+    border-radius: 0;
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: #dadbdd;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #dadbdd;
+    border-radius: 2px;
+    overflow-x: hidden;
+  }
 }
 
 

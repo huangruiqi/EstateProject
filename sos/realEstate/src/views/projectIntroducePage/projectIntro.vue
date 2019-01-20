@@ -12,12 +12,16 @@
       <div class="backImage"  @click="clickBack">
         <img src="@/assets/img/brandBGC/back.png" alt="">
       </div>
-
+      <contact @haveCon='haveCon'></contact>
+      <contact-content @closeInfo='closeInfo' :style='{display: conDisplay}'></contact-content>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import intial from '../../assets/img/index/loading.jpg';
+import getImage from '../../ultis/getImage.js'
+import contact from '../../components/haveContact'
+import contactContent from '../../components/contactContent'
 export default {
   data() {
     return {
@@ -26,22 +30,23 @@ export default {
       projectWord: "",
       D3D: require('../../assets/img/index/3D.png'),
       check: 0,
-      imgBig: ""
+      imgBig: "",
+      conDisplay: 'none'
     }
   },
   created() {
     //请求首页项目图片和背景图片
-    this.$axios.get("/project")
+    this.$axios.get("/project/info/get")
     .then(res => {
       if (screen.width > 1024){
-        this.imgBig = res.data.data.image.fileName;
+        this.imgBig = getImage(res.data.data.backgroundImageLocation, 1);
       }else {
-        this.imgBig = res.data.data.image.middle;
+        this.imgBig = getImage(res.data.data.backgroundImageLocation, 2);
       }
       // this.imgProjectBack = res.data.data.image.fileName;
-      this.imgProjectBack = res.data.data.image.min;
+      this.imgProjectBack = getImage(res.data.data.backgroundImageLocation, 4);
       // this.imgBig = res.data.data.image.fileName;
-      this.projectWord = res.data.data.introduction;
+      this.projectWord = res.data.data.content;
       this.check = 1;
     })
     .catch(error => {
@@ -51,7 +56,20 @@ export default {
   mounted() {
 
   },
+
+  components: {
+    contact,
+    contactContent
+  },
   methods: {
+    haveCon() {
+      this.conDisplay = 'flex';
+      this.$forceUpdate();
+    },
+    closeInfo() {
+      this.conDisplay = 'none';
+      this.$forceUpdate();
+    },
     //添加介绍的文字
     addWords() {
       // console.log(document.getElementsByClassName('wordContent')[0]);
@@ -67,9 +85,7 @@ export default {
       this.$router.push({path: '/index'});;
     }
   },
-  components: {
-    // 'vue-lazy-component': VueLazyComponent
-  },
+  
   watch: {
       projectWord() {
           this.addWords();
@@ -104,18 +120,18 @@ export default {
   // filter: blur(4px);
   transition: all 0.7s;
   .projectWord {
-      width: px2rem(388);
-      height: px2rem(724);
+      width: px2rem(509);
+      height: px2rem(924);
       position: absolute;
-      left: transverse(90);
+      left: transverse(93);
       top: vertical(0);
       background-color: black;
       opacity: 0.8;
       .wordTitle {
           width: 100%;
-          height: px2rem(63);
-          margin-top: px2rem(90);
-          background-color: $colorAll;
+          height: px2rem(90);
+          margin-top: px2rem(134);
+          background-color: #c7ad8c;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -124,11 +140,13 @@ export default {
           }
       }
       .wordContent {
-          width: px2rem(249);
-          height: px2rem(371);
-          margin: px2rem(71) auto;
+          width: px2rem(392);
+          height: px2rem(500);
+          margin: px2rem(57) auto;
           span {
-              @include sc(px2rem(20), #ffffff);
+              @include sc(px2rem(24), #ffffff);
+              line-height: px2rem(48);
+              letter-spacing: -1;
           }
       }
   }

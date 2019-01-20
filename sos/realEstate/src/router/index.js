@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import contact from '../components/haveContact'
 // import guidePage from "../views/guidePage/guide"
 // import homePage from "../views/homePage/home"
 
@@ -82,6 +83,7 @@ export default new Router({
       ]
     },
     {
+      name: 'house',
       path: '/houseType',
       component: resolve => require(['../views/houseTypePage/components/index'], resolve),
       children: [
@@ -94,6 +96,7 @@ export default new Router({
           component: resolve => require(['../views/houseTypePage/prototypeRoomPage/index'], resolve)
         },
         {
+          name: 'plan',
           path: 'plan',
           component: resolve => require(['../views/houseTypePage/planPage/index'], resolve)
         },

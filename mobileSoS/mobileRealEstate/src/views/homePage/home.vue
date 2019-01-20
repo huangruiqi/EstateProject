@@ -45,7 +45,7 @@
       width: px2rem(505);
       height: px2rem(195);
       @include fj();
-      align-items: space-between;
+      align-items: center;
       flex-wrap: wrap;
       margin-top: 4%;
       li {
@@ -81,33 +81,73 @@
 </style>
 
 <script type="text/ecmascript-6">
+import getImage from '../../utils/getImage.js'
 export default {
   data() {
     return {
       imgIndexBack: "",
       imgProject: "",
       homeLogo: '',
-      homeBgc: [require('../../assets/img/index/homeBgc.png')],
+      homeBgc: '',
       moduleIndex: [],
-      icon: [require('../../assets/img/index/icon1.png'),require('../../assets/img/index/icon2.png'),require('../../assets/img/index/icon3.png'),require('../../assets/img/index/icon4.png')]
+      icon: [require('../../assets/img/index/icon1.png'),require('../../assets/img/index/icon2.png'),require('../../assets/img/index/icon3.png'),require('../../assets/img/index/icon4.png')],
+      moduleIndex: [
+        {
+          url: '/projectIntroduce',
+          description: "项目介绍",
+          icon: require('../../assets/img/index/icon1.png')
+        },{
+          url: '/brand',
+          description: "品牌概况",
+          icon: require('../../assets/img/index/icon2.png')
+        },{
+          url: '/houseType',
+          description: "户型展示",
+          icon: require('../../assets/img/index/icon3.png')
+        },{
+          url: '/nearBy',
+          description: "楼盘周边",
+          icon: require('../../assets/img/index/icon4.png')
+        },
+      ]
     }
   },
   created() {
-    this.$axios.get('/bootpage')
+    this.$axios.get('/basic/guidePage/get')
       .then(res=>{
-        this.homeLogo = res.data.data.logo.min
+        this.homeLogo = getImage(res.data.data.projectLogoLocation, 3)
+      })
+    this.$axios.get('/basic/mainPage/get')
+      .then(res=>{
+        for (let i in res.data.data) {
+          this.moduleIndex.map((item, index) => {
+            if (item.url === '/projectIntroduce' && i === 'projectIntroductionBar') {
+              item.icon = getImage(res.data.data[i], 3)
+            }
+            if (item.url === '/brand' && i === 'brandOverviewBar') {
+              item.icon = getImage(res.data.data[i], 3)
+            }
+            if (item.url === '/houseType' && i === 'unitDisplayBar') {
+              item.icon = getImage(res.data.data[i], 3)
+            }
+            if (item.url === '/nearBy' && i === 'projectAroundBar') {
+              item.icon = getImage(res.data.data[i], 3)
+            }
+          })
+        }
+        this.homeBgc = getImage(res.data.data.mobileBackgroundImageLocation, 3)
       })
     //请求激活的模块
-    this.$axios.get("/module/main", {params:{'select':'true'}})
-    .then(res => {
-      this.moduleIndex = res.data.data;
-      for (let i = 0; i < this.moduleIndex.length; i++) {
-        this.moduleIndex[i].icon = this.icon[i]
-      }
-    })
-    .catch(error => {
-      console.log(error);
-    })
+    // this.$axios.get("/module/main", {params:{'select':'true'}})
+    // .then(res => {
+    //   this.moduleIndex = res.data.data;
+    //   for (let i = 0; i < this.moduleIndex.length; i++) {
+    //     this.moduleIndex[i].icon = this.icon[i]
+    //   }
+    // })
+    // .catch(error => {
+    //   console.log(error);
+    // })
   },
   methods: {
   }

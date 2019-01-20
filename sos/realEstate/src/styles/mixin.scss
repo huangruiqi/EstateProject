@@ -1,4 +1,5 @@
-$colorAll: #ffdaaa;
+@import './main.scss';
+$colorAll: #666666;
 // 背景图片地址和大小
 @mixin bis($url) {
   background-image: url($url);
@@ -61,30 +62,15 @@ $colorAll: #ffdaaa;
 @mixin scrollBar {
   &::-webkit-scrollbar-track-piece {
     overflow-x: hidden; 
-    background: #797979;
+    background: #cacaca;
   }
   &::-webkit-scrollbar-button {
     background: #797979;
     width: 18px;
     height: 18px;
-    display: block;
+    display: none;
     // border: 1px solid white;
   } 
-  // &::-webkit-scrollbar-button:vertical:single-button:start {
-  //   width: 100%;
-  //   background: url("/static/img/top.png") -1.5px -1px no-repeat;
-  //   cursor: pointer;
-  //   border-bottom: 1px solid #1E1E1E;
-
-  // }
-  // &::-webkit-scrollbar-button:vertical:single-button:end {
-  //   width: 100%;
-  //   background: url("/static/img/bottom.png") -1.5px -1px no-repeat;
-
-  //   cursor: pointer;
-  //   border-top: 1px solid #1E1E1E;
-
-  // }
   &::-webkit-scrollbar-button:vertical:start:increment {
 
     //横向 开始端 增量按钮
@@ -99,16 +85,59 @@ $colorAll: #ffdaaa;
 
 
   &::-webkit-scrollbar {
-    width: 15px;
+    width: px2rem(16);
     overflow-x: hidden;
     border-radius: 0;
   }
   &::-webkit-scrollbar-corner {
-    background: #1E1E1E;
+    background: #aeaeae;
   }
   &::-webkit-scrollbar-thumb {
     background: #A8A8A8;
     border-radius: 0;
+    overflow-x: hidden;
+  }
+}
+@mixin scrollBarTwo {
+  &::-webkit-scrollbar-track-piece {
+    overflow-x: hidden;
+    background: #fff;
+  }
+
+  &::-webkit-scrollbar-button {
+    background: #dadbdd;
+    width: 18px;
+    height: 18px;
+    display: none;
+    // border: 1px solid white;
+  }
+
+  &::-webkit-scrollbar-button:vertical:start:increment {
+
+    //横向 开始端 增量按钮
+    display: none;
+  }
+
+  &::-webkit-scrollbar-button:vertical:end:decrement {
+
+    //横向 末尾端 减量按钮
+    display: none;
+  }
+
+
+  &::-webkit-scrollbar {
+    width: px2rem(6);
+    overflow-x: hidden;
+    border-radius: 0;
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: #dadbdd;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #dadbdd;
+    border-radius: 2px;
     overflow-x: hidden;
   }
 }

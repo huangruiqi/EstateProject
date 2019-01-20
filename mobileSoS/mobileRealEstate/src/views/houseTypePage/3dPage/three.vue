@@ -33,11 +33,20 @@ export default {
         }
     },
     created() {
-        this.$axios.get("/house/housetype")
+        if (this.$route.query.houseNum) {
+            this.houseNum = this.$route.query.houseNum;
+        }
+        this.$axios.get("/house/houseType/get")
             .then(res => {
                 this.house = res.data.data;
-                if (this.house[0].houseType.vrUrl) {
-                    this.src=this.house[0].houseType.vrUrl;
+                if (this.house && this.house[this.houseNum] && this.house[this.houseNum].houseTypeVrUrl) {
+                    this.src=this.house[this.houseNum].houseTypeVrUrl;
+                    // this.numRight = res.data.data[this.houseNum].houseSampleRooms.length;
+                    // this.imgSrc = res.data.data[this.houseNum].houseSampleRooms;
+                    // this.clickUrl = this.imgSrc[this.houseNum].houseTypeImage.image.fileName;
+                    // this.$emit('event', this.clickUrl);
+                    // document.getElementById('typeClassThree').style.display = 'none';
+
                 }
             })
             .catch(error => {
@@ -49,13 +58,13 @@ export default {
         this.$on('giveNum', (val) => { 
             // console.log(val);
             if (this.house[val]) {
-                if(this.house[val].houseType.vrUrl) {
-                    this.$emit('checkVR', val);
+                if(this.house[val].houseTypeVrUrl) {
+                    this.$emit('checkVR', val, 3);
                     this.src = '';
-                    this.src = this.house[val].houseType.vrUrl;
+                    this.src = this.house[val].houseTypeVrUrl;
                 }else {
                     // alert(val);
-                    this.$emit('checkVR', val);
+                    this.$emit('checkVR', val, 3);
                     // this.$router.push('/houseType/plan');
                     // this.$router.go(-1);
                     // this.$route.path = '/houseType'
@@ -118,7 +127,7 @@ export default {
     height: 100%;
     .pic {
         width: 100%;
-        height: 100%;
+        height: px2rem(540);
     }
 }
 </style>

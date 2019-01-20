@@ -11,7 +11,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-
+import getImage from '../../../utils/getImage.js'
 export default {
   data() {
     return {
@@ -19,18 +19,27 @@ export default {
         typeClassChange: "activeTwo",//传给bottom被点击的盒子样式
         imgPlanBack: "",
         dataAll: [],
-        houseNum: 0
+        houseNum: 0,
+        title: ''
     }
   },
   created() {
     if (this.$route.query.houseNum) {
       this.houseNum = this.$route.query.houseNum;
     }
-    this.$axios.get("/house/housetype")
+    this.$axios.get("/house/houseType/get")
     .then(res => {
-      this.dataAll = res.data.data;
-      this.imgPlanBack = this.dataAll[this.houseNum].housePlans[0].houseTypeImage.image.min;
-      console.log( this.imgPlanBack);
+      this.title = res.data.data;
+        if(this.title[this.houseNum]) {
+          this.$axios.get("/house/houseTypeImage/get?houseTypeId=" + this.title[this.houseNum].id)
+          .then(res => { 
+            this.dataAll = res.data.data;
+            this.imgPlanBack = getImage(this.dataAll.houseTypeImageLocation, 3);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        }
     })
     .catch(error => {
       console.log(error);
@@ -39,35 +48,21 @@ export default {
   mounted(){
     document.title = '平面图';
     this.$on('giveNum', (val) => { 
-      const error = 0;
-      if(this.dataAll[val]) {
-        if(this.dataAll[val].housePlans[0]) {
-          this.imgPlanBack = this.dataAll[val].housePlans[0].houseTypeImage.image.min;
-        }else {
-          this.imgPlanBack = this.dataAll[error].housePlans[0].houseTypeImage.image.min;
-        }  
-      }
-      if (this.dataAll[val]) {
-        if(this.dataAll[val].houseType.vrUrl) {
-          this.$emit('checkVR', val, 2);
-          // this.src = this.dataAll[val].houseType.vrUrl;
-        }else {
-          this.$emit('checkVR', val, 2);
+      if (this.houseNum != val && this.title[val]) {
+        this.houseNum = val;
+        if(this.title[this.houseNum]) {
+          this.$axios.get("/house/houseTypeImage/get?houseTypeId=" + this.title[this.houseNum].id)
+          .then(res => { 
+            this.dataAll = res.data.data;
+            this.imgPlanBack = this.dataAll && this.dataAll.houseTypeImageLocation && getImage(this.dataAll.houseTypeImageLocation, 3);
+          })
+          .catch(error => {
+            console.log(error);
+          });
         }
       }
+      this.$emit('checkVR', val, 2);
     });
-    // let $targetObj = $('#targetObj');
-    //             //初始化设置
-    //     cat.touchjs.init($targetObj, function (left, top, scale, rotate) {
-    //     });
-    //             //拖拽
-    //     cat.touchjs.drag($targetObj, function (left, top) {
-                
-    //     });
-    //             //缩放
-    //     cat.touchjs.scale($targetObj, function (scale) {
-            
-    //     });
   },
   methods: {
       //点击返回
@@ -184,7 +179,7 @@ export default {
   position: relative;
   .picA {
     width: 100%;
-    height: px2rem(562);
+    height: px2rem(540);
     background-repeat: no-repeat;
     background-size: 100% 100%;
   }
@@ -196,14 +191,16 @@ export default {
   }
   .pageNum {
     width: 100%;
-    height: px2rem(30);
+    height: px2rem(35);
+            // background-color: #fff;
     position: relative;
-    span {
-      position: absolute;
-      right: px2rem(61);
-      @include fontSize(23);
-      color: #c9c9c9;;
-    }
+            span {
+                position: absolute;
+                right: px2rem(30);
+                @include fontSize(30);
+                letter-spacing: px2rem(2);
+                color: #717171;
+            }
   }
 }
 

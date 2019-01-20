@@ -4,9 +4,9 @@
             <div class="rightContent" @click="changeDivClass(m)">
                 <div :class="click == m ? addArrowRight : arrowRight "></div>
                 <div :class="click == m ? addSmallRight : smallRight ">
-                    <img class="imgRight" v-if="imgSrc[m - 1]" :src="imgSrc[m - 1].houseTypeImage.image.min" alt="">
+                    <img class="imgRight" v-if="imgSrc[m - 1]" :src="mini[m - 1]" alt="">
                     <div class="floatWords" v-if="imgSrc[m - 1]">
-                        {{imgSrc[m - 1].roomTypeName}}样板间展示图
+                        {{imgSrc[m - 1].roomTypeName}}样板间
                     </div>
                 </div>
             </div>
@@ -15,6 +15,7 @@
 </template>
 <script>
 import no from '../../../../assets/img/no.jpg'
+import getImage from '../../../../ultis/getImage.js'
 export default {
     name: 'rightNavBar',
     data() {
@@ -29,62 +30,92 @@ export default {
             clickUrl: "",//获取被点击的url
             dataAll: [],
             houseNum: 0,
-            that: {}
+            that: {},
+            title: [],
+            mini: []
         }
     },
     created() {
-        if(this.intial == 1) {
-            this.$axios.get("/house/housetype")
-            .then(res => {
-                // console.log(this.$route.query.houseNum);
-                // if (this.$route.query.houseNum) {
-                //     this.houseNum = this.$route.query.houseNum;
-                // } 
-                // console.log(this.houseNum);             
-                this.dataAll = res.data.data;
-                if (res.data.data[this.houseNum].houseSampleRooms && res.data.data[this.houseNum].houseSampleRooms[this.houseNum]) {
-                    this.numRight = res.data.data[this.houseNum].houseSampleRooms.length;
-                    this.imgSrc = res.data.data[this.houseNum].houseSampleRooms;
-                    this.clickUrl = this.imgSrc[this.houseNum].houseTypeImage.image.fileName;
-                    this.$emit('event', this.clickUrl);
-                }
-            })
-            .catch(error => {
+        this.$axios.get("/house/houseType/get")
+        .then(res => {
+            this.title = res.data.data;
+            if(this.title[0]) {
+                this.$axios.get("/house/sampleRoomImage/get?houseTypeId=" + this.title[0].id)
+                .then(res => {           
+                    this.dataAll = res.data.data;
+                    if (this.dataAll && this.dataAll[0]) {
+                        this.dataAll.forEach((data) => {
+                            this.imgSrc.push(data);
+                            this.mini.push(getImage(data.sampleRoomImageLocation, 5));
+                        });
+                        this.numRight = this.dataAll.length;
+                        this.clickUrl = this.imgSrc[0].sampleRoomImageLocation;
+                        this.$emit('event', this.clickUrl);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+            }
+        })
+        .catch(error => {
             console.log(error);
-            });
-        }
+        });
     },
     mounted() {
         if (this.intial == 1) {
             //让父组件触发
             this.$on('changeHouse', (val, val2) => {
-                if (this.houseNum != val) {
+                if (this.houseNum != val && this.title[val]) {
                     this.houseNum = val;
-                    this.numRight = this.dataAll[val].houseSampleRooms.length;
-                    this.imgSrc = this.dataAll[val].houseSampleRooms;
-                    this.click = val2;
-                    if (this.dataAll[val].houseSampleRooms[0]) {
-                        this.clickUrl = this.dataAll[val].houseSampleRooms[0].houseTypeImage.image.min;
-                        this.$emit('event', this.clickUrl);
-                        this.$emit('haha');
-                        this.$forceUpdate();//强制渲染
-                    } else {
-                        this.$emit('event', no);
-                        // this.$emit('haha');                       
-                    }
+                    this.$axios.get("/house/sampleRoomImage/get?houseTypeId=" + this.title[val].id)
+                    .then(res => {           
+                        this.dataAll = res.data.data;
+                        this.imgSrc = [];
+                        this.mini = [];
+                        if (this.dataAll && this.dataAll[0]) {
+                            this.dataAll.forEach((data) => {
+                                this.imgSrc.push(data);
+                                this.mini.push(getImage(data.sampleRoomImageLocation, 5));
+                            });
+                            this.numRight = this.dataAll.length;
+                            this.clickUrl = this.imgSrc[0].sampleRoomImageLocation;
+                            this.$emit('event', this.clickUrl);
+                            this.$emit('haha');
+                            this.changeDivClass(1);
+                            this.$forceUpdate();//强制渲染
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
                 }
             });
             //由bottom触发源
             this.$on('changeHouse2', (val) => {    
-                // console.log(val);
-                if(this.dataAll[val] && this.houseNum != val) {
-                    // console.log(val + "f" +this.houseNum);
-                    this.houseNum = val; 
-                    this.numRight = this.dataAll[val].houseSampleRooms.length;
-                    this.imgSrc = this.dataAll[val].houseSampleRooms;
-                    this.clickUrl = this.dataAll[val].houseSampleRooms[0].houseTypeImage.image.fileName;
-                    this.$emit('event', this.clickUrl);
-                    this.$emit('haha');
+                if (this.houseNum != val && this.title[val]) {
+                    this.houseNum = val;
+                    this.$axios.get("/house/sampleRoomImage/get?houseTypeId=" + this.title[val].id)
+                    .then(res => {           
+                        this.dataAll = res.data.data;
+                        this.imgSrc = [];
+                        this.mini = [];
+                        if (this.dataAll && this.dataAll[0]) {
+                            this.dataAll.forEach((data) => {
+                                this.imgSrc.push(data);
+                                this.mini.push(getImage(data.sampleRoomImageLocation, 5));
+                            });
+                            this.numRight = this.dataAll.length;
+                            this.clickUrl = this.imgSrc[0].sampleRoomImageLocation;
+                            this.$emit('event', this.clickUrl);
+                            this.$emit('haha');
+                            // this.changeDivClass(1);
+                            this.$forceUpdate();//强制渲染
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
                 }
             });
         }
@@ -93,7 +124,7 @@ export default {
         //点击右边的框，样式发生变化
         changeDivClass(m) {
             this.click = m;
-            this.clickUrl = this.imgSrc[m - 1].houseTypeImage.image.fileName;
+            this.clickUrl = this.imgSrc[m - 1].sampleRoomImageLocation;
             this.$emit('event', this.clickUrl);
         }
         //让大图变清晰
@@ -104,9 +135,9 @@ export default {
         // }
     },
     watch: {
-        houseNum() {
-            if (this.dataAll[this.houseNum] && this.dataAll[this.houseNum].houseSampleRooms[0]) {
-                this.clickUrl = this.dataAll[this.houseNum].houseSampleRooms[0].houseTypeImage.image.fileName;
+        dataAll() {
+            if (this.imgSrc && this.imgSrc[0]) {
+                this.clickUrl = this.imgSrc[0].sampleRoomImageLocation;
                 this.$emit('event', this.clickUrl);
             }
         },
@@ -118,9 +149,9 @@ export default {
             let imgObject = [];
             for (let i = 0; i < this.imgSrc.length; i++) {
                 if (screen.width > 1024){
-                    imgUrl[i] = this.imgSrc[i].houseTypeImage.image.fileName;
+                    imgUrl[i] = getImage(this.imgSrc[i].sampleRoomImageLocation, 1);
                 }else {
-                    imgUrl[i] = this.imgSrc[i].houseTypeImage.image.middle;
+                    imgUrl[i] = getImage(this.imgSrc[i].sampleRoomImageLocation, 2);
                 }  
                 // imgUrl[i] = this.imgSrc[i].houseTypeImage.image.fileName;
                 imgObject[i] = new Image();
@@ -129,8 +160,7 @@ export default {
 
             for (let i = 0; i < this.imgSrc.length; i++) {
                 imgObject[i].onload = function () {
-
-                    ele[i + 2].src = imgUrl[i];
+                    imgUrl[i] ? ele[i + 2].src = imgUrl[i] : "";
                     ele[i + 2].setAttribute('class', 'imgRight complete');
                     if (i == 0) {
                         that.$emit('eventB');
@@ -155,8 +185,7 @@ export default {
         height: px2rem(32);
         background-color: #151515;
         opacity: 0.61;
-        float: left;
-        margin-top: -24px;
+        transform: translateY(-100%);
         @include fj(center);
         align-items: flex-start;
         @include sc(px2rem(19), white);
@@ -168,28 +197,27 @@ export default {
         height: px2rem(32);
         background-color: #151515;
         opacity: 0.61;
-        float: left;
-        margin-top: -19px;
+        transform: translateY(-100%);
         @include fj(center);
         align-items: flex-start;
         @include sc(px2rem(19), white);
     }
 }
-::-webkit-scrollbar-button:vertical:single-button:start {
-    width: 100%;
-    background: url("../../../../assets/img/top.png") -1.5px -1px no-repeat;
-    cursor: pointer;
-    border-bottom: 1px solid #1E1E1E;
+// ::-webkit-scrollbar-button:vertical:single-button:start {
+//     width: 100%;
+//     background: url("../../../../assets/img/top.png") -1.5px -1px no-repeat;
+//     cursor: pointer;
+//     border-bottom: 1px solid #1E1E1E;
 
-  }
-::-webkit-scrollbar-button:vertical:single-button:end {
-    width: 100%;
-    background: url("../../../../assets/img/bottom.png") -1.5px -1px no-repeat;
+//   }
+// ::-webkit-scrollbar-button:vertical:single-button:end {
+//     width: 100%;
+//     background: url("../../../../assets/img/bottom.png") -1.5px -1px no-repeat;
 
-    cursor: pointer;
-    border-top: 1px solid #1E1E1E;
+//     cursor: pointer;
+//     border-top: 1px solid #1E1E1E;
 
-  }
+//   }
 .rightNavBar{
     width: px2rem(304);
     height: px2rem(608);
@@ -209,7 +237,7 @@ export default {
         cursor: pointer;
         .rightContent {
             width: 100%;
-            height: px2rem(157);
+            height: px2rem(158);
             display: flex;
             align-items: center;
             .arrowRight {
@@ -222,15 +250,16 @@ export default {
                 width: px2rem(36);
                 height: px2rem(36);
                 border: px2rem(18) solid transparent;
-                border-right-color: $colorAll;
+                border-right-color: white;
             }
             .smallRight {
-                height: px2rem(157);
-                width: px2rem(230);
-                border: 0;
+                height: 100%;
+                width: px2rem(235);
+                border: px2rem(6) solid transparent;
+                
                 .imgRight {
                     width: 100%;
-                    height: px2rem(157);
+                    height: 100%;
                     filter: blur(4px);
                     transition: all 0.7s;
                 }
@@ -240,8 +269,8 @@ export default {
             }
             .addSmallRight {
                 height: 100%;
-                width: px2rem(230);
-                border: px2rem(2) solid $colorAll;
+                width: px2rem(235);
+                border: px2rem(6) solid white;
                 .imgRight {
                     width: 100%;
                     height: 100%;

@@ -7,12 +7,10 @@
         </p>
       </div>
     </div>
-    <div class="allBack" @click="clickBack">
-      <img src="@/assets/img/goHouseHistory/back.png" alt="">
-    </div>
   </div>
 </template>
 <script>
+import getImage from '../../utils/getImage.js'
 export default {
   name: 'projectIntro',
   data() {
@@ -23,10 +21,10 @@ export default {
     }
   },
   created() {
-    this.$axios.get('/project')
+    this.$axios.get('/project/info/get')
       .then(res=>{
-        this.backgroundImage = res.data.data.image.fileName;
-        this.words = res.data.data.introduction
+        this.backgroundImage = getImage(res.data.data.backgroundImageLocation, 2)
+        this.words = res.data.data.content;
     })
     this.$nextTick(()=>{
       document.title = '项目介绍'
@@ -54,24 +52,25 @@ export default {
   position: relative;
   .wordIntro {
     width: 100%;
-    height: px2rem(266);
-    color: #fff;
-    background-color: rgba(18, 18, 18, 0.7);
+    height: px2rem(340);
+    color: #000000;
+    background-color: #d1d1d1;
+    opacity: .7;
     bottom: 0;
     position: absolute;
     z-index: 99;
-    opacity: 0.8;
     .wordIntroContent {
       width: 100%;
       height: 19rem;
       @include fj(center);
       align-items: center;
       p {
-        width: 90%;
-        height: 13rem;
-        color: #fff;
-        @include fontSize(23);
-        @include lineHeight(32);
+        width: 85%;
+        height: 15rem;
+        color: #000000;
+        @include fontSize(28);
+        @include lineHeight(48);
+        letter-spacing: .1em;
         text-indent: 2em;
       }
     }

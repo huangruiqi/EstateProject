@@ -4,9 +4,9 @@
             <div class="rightContent" @click="changeDivClass(m)">
                 <div :class="click == m ? addArrowRight : arrowRight "></div>
                 <div :class="click == m ? addSmallRight : smallRight ">
-                    <img class="imgRight" v-if="imgSrc[m - 1]" :src="imgSrc[m - 1].landscapeTypeImage.image.min" alt="">
+                    <img class="imgRight" v-if="imgSrc[m - 1]" :src="mini[m - 1]" alt="">
                     <div class="floatWords" v-if="imgSrc[m - 1]">
-                        {{imgSrc[m - 1].placeTypeName}}展示图
+                        {{imgSrc[m - 1].placeTypName}}展示图
                     </div>
                 </div>
             </div>
@@ -14,6 +14,7 @@
     </div>
 </template>
 <script>
+import getImage from '../../../ultis/getImage.js'
 export default {
     name: 'rightNavBar',
     data() {
@@ -27,29 +28,48 @@ export default {
             smallRight: 'smallRight',//未被点击样式
             clickUrl: "",//获取被点击的url
             dataAll: [],
-            viewNum: 0
+            viewNum: 0,
+            mini: []
         }
     },
     created() {
         if(this.intial == 1) {
-            this.$axios.get("/landscape/images")
+            this.$axios.get("/surround/publicUtilities/get")
             .then(res => {
                 this.dataAll = res.data.data;
-                this.numRight = res.data.data.landscapeDto.common.length;
-                this.imgSrc = res.data.data.landscapeDto.common;
-                this.clickUrl = this.imgSrc[this.viewNum].landscapeTypeImage.image.fileName;
+                this.numRight = 0;
+                this.imgSrc = [];
+                this.mini = [];
+                this.dataAll.forEach((data, i) => {
+                    if(data.imageType == 1) {
+                        this.numRight++;
+                        this.imgSrc.push(data);
+                        this.mini.push(getImage(data.imageLocation, 5));
+                    } 
+                });
+                this.clickUrl = getImage(this.imgSrc[this.viewNum].imageLocation, 1);
                 this.$emit('event', this.clickUrl);
             })
             .catch(error => {
-            console.log(error);
+                console.log(error);
             });
         }else {
-            this.$axios.get("/landscape/images")
+            this.$axios.get("/surround/publicUtilities/get")
             .then(res => {
                 this.dataAll = res.data.data;
-                this.numRight = res.data.data.landscapeDto.park.length;
-                this.imgSrc = res.data.data.landscapeDto.park;
-                this.clickUrl = this.imgSrc[this.viewNum].landscapeTypeImage.image.fileName;
+                this.numRight = 0;
+                this.imgSrc = [];
+                this.mini = [];
+
+                this.dataAll.forEach((data, i) => {
+                    if(data.imageType == 0) {
+                        this.numRight++;
+                        this.imgSrc.push(data);
+                        this.mini.push(getImage(data.imageLocation, 5));
+                    } 
+                });
+
+                this.clickUrl = getImage(this.imgSrc[this.viewNum].imageLocation, 1);
                 this.$emit('event', this.clickUrl);
             })
             .catch(error => {
@@ -64,7 +84,7 @@ export default {
         //点击右边的框，样式发生变化
         changeDivClass(m) {
             this.click = m;
-            this.clickUrl = this.imgSrc[m - 1].landscapeTypeImage.image.fileName;
+            this.clickUrl = getImage(this.imgSrc[m - 1].imageLocation, 1);
             this.$emit('event', this.clickUrl);
         }
     },
@@ -77,9 +97,9 @@ export default {
             let imgObject = [];
             for (let i = 0; i < this.imgSrc.length; i++) {
                 if (screen.width > 1024){
-                    imgUrl[i] = this.imgSrc[i].landscapeTypeImage.image.fileName;
+                    imgUrl[i] = getImage(this.imgSrc[i].imageLocation, 1);
                 }else {
-                    imgUrl[i] = this.imgSrc[i].landscapeTypeImage.image.middle;
+                    imgUrl[i] = getImage(this.imgSrc[i].imageLocation, 2);
                 }                   
                 // imgUrl[i] = this.imgSrc[i].landscapeTypeImage.image.fileName;
                 imgObject[i] = new Image();
@@ -113,8 +133,7 @@ export default {
         height: px2rem(32);
         background-color: #151515;
         opacity: 0.61;
-        float: left;
-        margin-top: -24px;
+        transform: translateY(-100%);
         @include fj(center);
         align-items: flex-start;
         @include sc(px2rem(19), white);
@@ -126,31 +145,30 @@ export default {
         height: px2rem(32);
         background-color: #151515;
         opacity: 0.61;
-        float: left;
-        margin-top: -19px;
+        transform: translateY(-100%);
         @include fj(center);
         align-items: flex-start;
         @include sc(px2rem(19), white);
     }
 }
-::-webkit-scrollbar-button:vertical:single-button:start {
-    width: 100%;
-    background: url("../../../assets/img/top.png") -1.5px -1px no-repeat;
-    cursor: pointer;
-    border-bottom: 1px solid #1E1E1E;
+// ::-webkit-scrollbar-button:vertical:single-button:start {
+//     width: 100%;
+//     background: url("../../../assets/img/top.png") -1.5px -1px no-repeat;
+//     cursor: pointer;
+//     border-bottom: 1px solid #1E1E1E;
 
-  }
-::-webkit-scrollbar-button:vertical:single-button:end {
-    width: 100%;
-    background: url("../../../assets/img/bottom.png") -1.5px -1px no-repeat;
+//   }
+// ::-webkit-scrollbar-button:vertical:single-button:end {
+//     width: 100%;
+//     background: url("../../../assets/img/bottom.png") -1.5px -1px no-repeat;
 
-    cursor: pointer;
-    border-top: 1px solid #1E1E1E;
+//     cursor: pointer;
+//     border-top: 1px solid #1E1E1E;
 
-  }
+//   }
 .rightNavBar{
     width: px2rem(304);
-    height: px2rem(610);
+    height: px2rem(608);
     float: left;
     margin-left: px2rem(2);
     overflow: scroll;
@@ -166,7 +184,7 @@ export default {
         cursor: pointer;
         .rightContent {
             width: 100%;
-            height: px2rem(156);
+            height: px2rem(158);
             display: flex;
             align-items: center;
             .arrowRight {
@@ -179,15 +197,17 @@ export default {
                 width: px2rem(36);
                 height: px2rem(36);
                 border: px2rem(18) solid transparent;
-                border-right-color: $colorAll;
+                border-right-color: white;
             }
             .smallRight {
-                height: px2rem(157);
-                width: px2rem(230);
-                border: 0;
+                height: 100%;
+                width: px2rem(235);
+                border: px2rem(6) solid transparent;
+                box-sizing: border-box;
+                overflow: visible;
                 .imgRight {
                     width: 100%;
-                    height: px2rem(157);
+                    height: 100%;
                     filter: blur(4px);
                     transition: all 0.7s;
                 }
@@ -197,8 +217,10 @@ export default {
             }
             .addSmallRight {
                 height: 100%;
-                width: px2rem(230);
-                border: px2rem(2) solid $colorAll;
+                width: px2rem(235);
+                border: px2rem(6) solid white;
+                box-sizing: border-box;
+                overflow: visible;
                 .imgRight {
                     width: 100%;
                     height: 100%;

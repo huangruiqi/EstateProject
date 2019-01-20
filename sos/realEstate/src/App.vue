@@ -7,8 +7,13 @@
 </template>
 
 <script>
+import contact from './components/haveContact';
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    contact
+  }
+
 }
 </script>
     

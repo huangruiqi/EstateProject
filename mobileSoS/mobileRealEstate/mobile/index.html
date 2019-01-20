@@ -1,0 +1,14 @@
+<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1,shrink-to-fit=no"><meta name=mobile-web-app-capable content=yes><meta name=apple-mobile-web-app-capable content=yes><meta name=apple-mobile-web-app-status-bar-style content=black-translucent><title>mobilerealestate</title><script src=./static/js/cat.touchjs.js></script><script src=./static/js/touch.js></script><link href=./static/css/app.48d9020485a51964db0c392d38b12fe4.css rel=stylesheet></head><body><script type=text/javascript>document.addEventListener('touchstart', function (event) {
+        if (event.touches.length > 1) {
+          event.preventDefault();
+        }
+      })
+      var lastTouchEnd = 0;
+      document.addEventListener('touchend', function (event) {
+        var now = (new Date()).getTime();
+        if (now - lastTouchEnd <=
+          300) {
+          event.preventDefault();
+        }
+        lastTouchEnd = now;
+      }, false)</script><div id=app></div><script type=text/javascript src=./static/js/manifest.7600e1814c4ca9f6c6bf.js></script><script type=text/javascript src=./static/js/vendor.df84e1b27abd346c29aa.js></script><script type=text/javascript src=./static/js/app.7ba0815f55fb84f6413f.js></script></body></html>

@@ -1,12 +1,12 @@
-<template>
-  <div class="guidePage">
+<template> 
+  <div class="guidePage" v-loading="this.$store.state.loading.loading">
     <div class="page" :style="{backgroundImage: 'url(' + imgBack + ')'}">
       <form action="/bootpage/image" name="formBack" method="post" enctype="multipart/form-data">
         <input type="file" name="file" id="imgGuideBack" style="display: none;">
       <!-- 　<input type="button" value="修改背景图片" onclick="document.formBack.file.click()">  -->
         <div class="tijiao" id="gai" onclick="document.formBack.file.click()"><img src="../../assets/img/subWord.png"></div>
         <!-- <input type="button" value="提交" @click='tiJiao' class="submit" > -->
-        <div class="tijiao" id="gou1" @click='tiJiao'></div>
+        <div class="tijiao" id="gou1" @click='tiJiao' style="display: none"></div>
       </form>
       <div class="logo" :style="{backgroundImage: 'url(' + imgLogo + ')'}">
         <form action="" name="formLogo">
@@ -14,10 +14,15 @@
         <!-- 　<input type="button" value="修改项目logo" onclick="document.formLogo.file.click()">  -->
           <div id="gaiTwo" onclick="document.formLogo.file.click()" class="tijiao"><img src="../../assets/img/subLogo.png"></div>
           <!-- <input type="button" value="提交" @click="tijiaoTwo" class="submit" > -->
-          <div class="tijiao" id="gou2" @click='tijiaoTwo'></div>
+          <div class="tijiao" id="gou2" @click='tijiaoTwo' style="display: none"></div>
           <!-- <img src="../../assets/img/clickQian.png" alt="" id="gou2" class="tijiao" @click="tijiaoTwo"> -->
         </form>
       </div>
+      <colorPicker v-model="color" v-on:change="headleChangeColor"></colorPicker>
+      <!-- <div class="click">
+        <img src="../../assets/img/guidePage/click.png"/>
+        <span>·点击探索·</span>
+      </div> -->
       <div class="word">
         <span :style="{display: appearCome}"><img src="../../assets/img/guidePage/bussiness.png" alt="" >&nbsp;&nbsp;{{word[0]}}</span>
         <span :style="{display: appearCome}"><img src="../../assets/img/guidePage/address.png" alt="">&nbsp;&nbsp;{{word[1]}}</span>
@@ -27,10 +32,11 @@
           <input  type="text" style="width:30%" maxlength="50" class="modifyInput" >
           <input type="text" style="width:30%" maxlength="50" class="modifyInput" >
           <!-- <input type="button" class="submit" value="提交" @click="tijiaoThree"> -->
-          <div class="tijiaoTwo" id="gou3" @click="tijiaoThree"></div>
+          <div class="tijiaoTwo" id="gou3" @click="tijiaoThree" style="display: none"></div>
         </form>
       </div>
       <!-- <input type="button" value="全部提交" class="allSub" disabled="disabled"> -->
+          <div class="allSub" id="allSub" @click="allSub"></div>
     </div>
   </div>
 </template>
@@ -41,36 +47,46 @@ import {checkChange} from '../../utils/urlGet.js'
 import {modify} from '../../utils/urlGet.js'
 import {modifyCome} from '../../utils/urlGet.js'
 import qs from 'qs'
+import ip from '../../../static/ip'
 export default {
   data() {
     return {
       "imgBack": "",
       "imgLogo": "",
+      "id": 0,
       "word": [],
       "appear": "none",
-      "appearCome": "block"
+      "appearCome": "block",
+      "success": [],
+      head: ip + ':8080/static/image/',
+      color: ''
     }
   },
   created() {
-    //请求公园类型
-    this.$axios.get("/bootpage")
+    this.$axios.get("/basic/guidePage/get")
     .then(res => {
-      // console.log(res.data.data.image.fileName);
-      this.imgBack = res.data.data.backgroundImage.fileName;
-      this.imgLogo = res.data.data.logo.fileName;
-      // for (let a = 0; a < 3; a++) {
-      //   this.word[a] = res.data.data.title[a].content;
-      // }
-      // console.log(res.data.data.host);
-      this.word[0] = res.data.data.host;
-      this.word[1] = res.data.data.address;
-      this.word[2] = res.data.data.hotline;
-      // this.word = res.data.word;
-      // console.log(res.data);
-      // this.houseType = res.data;
+      // 切块图片
+      if (res.data.data && res.data.data.backgroundImageLocation) {
+        const backImgSplit = res.data.data.backgroundImageLocation.split(/\_|\./g);
+        this.imgBack = this.getImage(res.data.data.backgroundImageLocation, 3);
+        //  this.head + backImgSplit[0] + "_" + backImgSplit[3] + "." + backImgSplit[backImgSplit.length - 1];
+      }
+      if (res.data.data && res.data.data.projectLogoLocation) {
+        const logoImgSplit = res.data.data.projectLogoLocation.split(/\_|\./g);
+        this.imgLogo = this.getImage(res.data.data.projectLogoLocation, 3);
+        // this.imgLogo = this.head + logoImgSplit[0] + "_" + logoImgSplit[3] + "." + logoImgSplit[logoImgSplit.length - 1];
+      }
+      //获取文字
+      if (res.data.data && res.data.data.projectHost && res.data.data.projectLocation && res.data.data.projectHotline) {
+        this.word[0] = res.data.data.projectHost;
+        this.word[1] = res.data.data.projectLocation;
+        this.word[2] = res.data.data.projectHotline;
+      }
+
+      res.data.data && res.data.data.id ? this.id = res.data.data.id : "";
     })
     .catch(error => {
-      console.log(error);
+      this.$message.error('获取失败，请上传内容！');
     });
   },
   mounted() {
@@ -84,56 +100,114 @@ export default {
         this.imgLogo = getUrl(inputTwo.files[0]);
     };
     this.modifyWord();
-    // this.allSubmit();
   },
   methods: {
+      getImage(data, i) {
+        const imgSplit = data.split(/\_|\./g)
+        let index = i;
+        while (imgSplit.length - 1 <= index) {
+            index--;
+        }
+          return this.head + imgSplit[0] + "_" + imgSplit[index] + "." + imgSplit[imgSplit.length - 1];
+      },
     tiJiao() {   
       let formdata = new FormData();
-      if ($('#imgGuideBack')) {
-        // alert(666);
-        formdata.append('file', document.getElementById('imgGuideBack').files[0]);
+      if ($('#imgGuideBack') && document.getElementById('imgGuideBack').files[0]) {
+        formdata.append('imageFile', document.getElementById('imgGuideBack').files[0]);
+        formdata.append('isLogo', 'false');
         let config = {
           headers: {
             'Content-Type': 'multipart/form-data'  
           }
         }
-        this.$axios.post('/bootpage/image', formdata, config).then( (res) => {alert("提交成功！");this.$router.go(0);
+        this.$axios.post('/basic/guidePage/image/update', formdata, config).then( (res) => {
+                this.$message({
+                    message: '背景上传成功！',
+                    type: 'success'
+                });
+                res.data.data && res.data.data.id ? this.id = res.data.data.id : "";
+                this.tijiaoTwo();
+                
         }).catch((error) =>{
+          this.$message.error('图片太大，提交失败！');
+          this.tijiaoTwo();
         });
+      } else {
+        this.tijiaoTwo();
       }
-      return false; 
     },
     tijiaoTwo() {
       let formdata = new FormData();
-      if ($('#imgGuideLogo')) {
-        formdata.append('file', document.getElementById('imgGuideLogo').files[0]);
+      if ($('#imgGuideLogo') && document.getElementById('imgGuideLogo').files[0]) {
+        formdata.append('imageFile', document.getElementById('imgGuideLogo').files[0]);
+        formdata.append('isLogo', 'true');
         let config = {
           headers: {
             'Content-Type': 'multipart/form-data'  
           }
         }
-        this.$axios.post('/bootpage/logo', formdata, config).then( (res) => {alert("提交成功");this.$router.go(0);
+        this.$axios.post('/basic/guidePage/image/update', formdata, config).then( (res) => {
+                this.$message({
+                    message: 'LOGO上传成功！',
+                    type: 'success'
+                });
+                this.tijiaoThree();
         }).catch((error) =>{
+          this.$message.error('提交失败！');
+          this.tijiaoThree();
         });
+      } else {
+        this.tijiaoThree();
       }
-      return false; 
     },
     tijiaoThree() {
         let config = {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded' 
+            'Content-Type': 'application/json' 
           }
         }
-        this.$axios.post('/bootpage/text',qs.stringify({
-          host: $('.modifyInput').eq(0).val(),
-          address: $('.modifyInput').eq(1).val(),
-          hotline: $('.modifyInput').eq(2).val()
-        }) , config).then( (res) => {alert("提交成功！");this.$router.go(0);
-        }).catch((error) =>{
-          alert(error);
-        });
-      // }
-      return false; 
+        if (this.appear == 'none' && this.id) {
+          this.$axios.post('/basic/guidePage/text/update',{
+            id: this.id,
+            projectHost: this.word[0],
+            projectLocation: this.word[1],
+            projectHotline: this.word[2]
+          }, config).then( (res) => {
+                  this.$message({
+                      message: '文字上传成功！',
+                      type: 'success'
+                  });
+          }).catch((error) =>{
+            this.$message.error('提交失败！');
+            return;
+          });
+        } else if (this.appear == 'none' && !this.id) {
+          this.$axios.post('/basic/guidePage/text/update',{
+            projectHost: this.word[0],
+            projectLocation: this.word[1],
+            projectHotline: this.word[2]
+          }, config).then( (res) => {
+                  this.$message({
+                      message: '文字上传成功！',
+                      type: 'success'
+                  });
+          }).catch((error) =>{
+            this.$message.error('提交失败！');
+            return;
+          });
+        } else {
+          this.$message({
+            message: '请确定修改好的文字（点击旁侧）',
+            type: 'warning'
+          });          
+        }
+
+    },
+    allSub() {
+        this.tiJiao();
+      // this.tijiaoTwo();
+      // this.tijiaoThree();
+      // 注释是因为拍提早被loading 消失
     },
     //全部提交
     // allSubmit() {
@@ -146,7 +220,8 @@ export default {
     // },
     //修改引导页文字
     modifyWord() {
-      let spanWord = document.getElementsByTagName('span');
+      let guidePage = document.getElementsByClassName('guidePage')[0];
+      let spanWord = guidePage.getElementsByTagName('span');
       let modifyInput = document.getElementsByClassName('modifyInput');
       let page = document.getElementsByClassName('page')[0];
       for (let i = 0; i < spanWord.length; i++) {
@@ -154,20 +229,32 @@ export default {
           this.appearCome = 'none';
           this.appear = 'block';
           for (let j = 0; j < spanWord.length && modifyInput[j]; j++) {
-            modifyInput[j].value = this.word[j];
+            if (this.word[j]) {
+              modifyInput[j].value = this.word[j];
+            } else {
+              modifyInput[j].value = '';
+            }
+            
           }
         };
         page.onclick = (ev) => {
           if(ev.target != page) return;
           else {
-            this.appear = 'none';
-            this.appearCome = 'block';
-            for (let j = 0; j < spanWord.length; j++) {
-              this.word[j] = modifyInput[j].value;
+            
+            if (this.appear == 'block') {
+              this.appear = 'none';
+              this.appearCome = 'block';
+              for (let j = 0; j < spanWord.length; j++) {
+                this.word[j] = modifyInput[j].value;
+              }
             }
+
           }
         }
       }
+    },
+    headleChangeColor(e) {
+      console.log(e);
     }
   },
   computed: {
@@ -181,9 +268,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" >
 @import "../../styles/main.scss";
 @import "../../styles/mixin.scss";
-.allSub {
-  cursor:not-allowed;
-}
+
 .allSub {
   position: absolute;
   top: px2rem(900);
@@ -194,12 +279,16 @@ export default {
   height: px2rem(930);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   background-color: #edf0f5;
   .page {
     // background-color: black;
     width: px2rem(1455);
     height: px2rem(818);
+    position: relative;
+    top: px2rem(20);
+    background-repeat: no-repeat;
+  background-size: 100% 100%;
     #gai {
       width: px2rem(103);
       height: px2rem(34);
@@ -247,9 +336,9 @@ export default {
       margin-right: px2rem(65);
     }
     .logo {
-      width: transverse(680);
-      height: vertical(405);
-      margin: 10% auto;
+      width: transverse(403);
+      height: vertical(286);
+      margin: 13% auto;
       // background-color: #fff;
       background-repeat: no-repeat;
       background-size: 100% 100%;
@@ -259,21 +348,37 @@ export default {
         img {
           width: 100%;
           height: 100%;
+          margin-left: px2rem(-80);
+          margin-top: px2rem(-30);
         }
+      }
+    }
+    .click {
+      width: transverse(161);
+      height: vertical(140);
+      @include fj();
+      flex-direction: column;
+      align-items: center;
+      margin: 0 auto;
+      img {
+        width: px2rem(73);
+      }
+      span {
+        @include sc(px2rem(20), #b1b1b1);
       }
     }
     .word {
       width: 80%;
       height: px2rem(24);
-      margin: 13% auto;
+      margin: 23% auto;
       // background-color: #fff;
       @include fj();
       align-items: center;
       span {
         cursor: pointer;
-        @include sc(px2rem(18));
+        @include sc(px2rem(22));
         img {
-          width: px2rem(18);
+          width: px2rem(22);
         }
         border: px2rem(1) dashed white;
       }
@@ -285,6 +390,23 @@ export default {
         @include fj();
       }
     }
+    #allSub {
+      width: px2rem(34);
+      height: px2rem(34);
+      background-image: url('../../assets/img/clickQian.png');
+      background-repeat: no-repeat;
+      background-size: 100% 100%;      
+      position: absolute;
+      top: 100%;
+      left: 100%;
+      transform: translate(-100%, -100%);
+    }
   }
 }
+.el-loading-parent--relative {
+    position: initial!important;
+}  
+// .m-colorPicker .box.open[data-v-11842410] {
+//   width: px2rem(1000);
+// }
 </style>

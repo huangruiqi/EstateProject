@@ -1,25 +1,26 @@
 <template>
 <!-- :style="{backgroundImage: 'url(' + imgBack + ')'}"  -->
   <div class="guidePage"  v-show="check" :style="{backgroundImage: 'url(' + imgBack + ')'}" @click="goIndex()">
-     <!-- <vue-lazy-component
-        v-if="root"
-        :viewport="root"
-      style="width:100%;height:100%;"> -->
+    <div class="content">
       <img :src=imgLogo alt="logo" class="guideLogo">
-      <!-- <img src="" alt="logo" class="visible-lg guideLogo"> -->
-      <!-- <img slot="skeleton" src="../../assets/img/leftNav/LOGO2.png" class="guideLogo"> -->
-     <!-- </vue-lazy-component> -->
-    <div class="guideInfor">
-      <span class="bottomInfor"><img src="../../assets/img/guidePage/bussiness.png" alt="bussiness"></span>
-      <span class="bottomInfor"><img src="../../assets/img/guidePage/address.png" alt="bussiness"></span>
-      <span class="bottomInfor"><img src="../../assets/img/guidePage/tel.png" alt="bussiness"></span>
+      <!-- <div class="click">
+        <img src="../../assets/img/guidePage/click.png"/>
+        <span>·点击探索·</span>
+      </div> -->
+      <div class="guideInfor">
+        <span class="bottomInfor"><img src="../../assets/img/guidePage/bussiness.png" alt="bussiness"></span>
+        <span class="bottomInfor"><img src="../../assets/img/guidePage/address.png" alt="bussiness"></span>
+        <span class="bottomInfor"><img src="../../assets/img/guidePage/tel.png" alt="bussiness"></span>
+      </div>
     </div>
+
   </div>
 
 </template>
 
 <script type="text/ecmascript-6">
 import intial from '../../assets/img/index/loading.jpg';
+import getImage from '../../ultis/getImage.js';
 export default {
   data() {
     return {
@@ -34,23 +35,23 @@ export default {
   },
   created() {
     //获取引导页数据
-    this.$axios.get("/bootpage")
+    this.$axios.get("/basic/guidePage/get?a=" + Math.random())
     .then((res) => {
       if (screen.width > 1024){
-        this.imgBig = res.data.data.backgroundImage.fileName;
-        this.imgLogoBig = res.data.data.logo.fileName;
+        this.imgBig = getImage(res.data.data.backgroundImageLocation, 1);
+        this.imgLogoBig = getImage(res.data.data.projectLogoLocation, 1);
       }else {
-        this.imgBig = res.data.data.backgroundImage.middle;
-        this.imgLogoBig = res.data.data.logo.middle;
+        this.imgBig = getImage(res.data.data.backgroundImageLocation, 2);
+        this.imgLogoBig = getImage(res.data.data.projectLogoLocation, 2);
       }
-      this.imgBack = res.data.data.backgroundImage.min;
+      this.imgBack = getImage(res.data.data.backgroundImageLocation, 5);
       // this.imgBig = res.data.data.backgroundImage.fileName;
       // this.imgBack = intial;
-      this.imgLogo = res.data.data.logo.min;
+      this.imgLogo = getImage(res.data.data.projectLogoLocation, 5);
       // this.imgLogoBig = res.data.data.logo.fileName;
-      this.word[0] = res.data.data.host;
-      this.word[1] = res.data.data.address;
-      this.word[2] = res.data.data.hotline;
+      this.word[0] = res.data.data.projectHost;
+      this.word[1] = res.data.data.projectLocation;
+      this.word[2] = res.data.data.projectHotline;
       this.check = 1;
     })
     .catch(error => {
@@ -94,7 +95,7 @@ export default {
         ele.src = this.imgLogo;
           // $('#muluguanli').css('background','url(res/skin/dist/img/zongheguanli_bg.png)  no-repeat');
         ele.setAttribute('class', 'guideLogo complete');
-        
+
       }
     },
     imgBig() {
@@ -128,30 +129,49 @@ export default {
   cursor: pointer;
   // filter: blur(4px);
   transition: all 0.7s;
-  .guideLogo {
-    width: px2rem(680);
-    @include cl();
-    top: vertical(245);
-    // filter: blur(4px);
-    transition: all 0.7s;
-  }
-  .complete {
-    filter: blur(0);
-  }
-  .guideInfor {
-    width: 80%;
-    height: px2rem(35);
-    @include cl();
-    top: vertical(892);
-    @include fj(space-around);
+  .content {
+    width: px2rem(1562);
+    height: vertical(730);
+    margin: px2rem(254) auto;
+    margin-bottom: px2rem(68);
+    @include fj();
+    flex-direction: column;
     align-items: center;
-    .bottomInfor {
-      @include sc(px2rem(23));
+    .guideLogo {
+      width: px2rem(403);
+      // filter: blur(4px);
+      transition: all 0.7s;
+    }
+    .complete {
+      filter: blur(0);
+    }
+    .click {
+      width: px2rem(161);
+      height: px2rem(140);
+      @include fj();
+      flex-direction: column;
+      align-items: center;
       img {
-        width: px2rem(23);
+        width: px2rem(73);
+      }
+      span {
+        @include sc(px2rem(30), #b1b1b1);
+      }
+    }
+    .guideInfor {
+      width: 100%;
+      height: px2rem(40);
+      @include fj();
+      align-items: center;
+      .bottomInfor {
+        @include sc(px2rem(30));
+        img {
+          width: px2rem(25);
+        }
       }
     }
   }
+
 }
 .complete {
   filter: blur(0);

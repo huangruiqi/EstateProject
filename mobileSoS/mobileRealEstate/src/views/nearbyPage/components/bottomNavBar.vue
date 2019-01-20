@@ -55,9 +55,10 @@ export default {
     height: 100%;
     @include fj(center);
     align-items: center;
+    // box-shadow: 0px px2rem(11) px2rem(36) px2rem(3) rgba(29, 35, 40, 0.2);
     .choose {
-        width: px2rem(350);
-        height: px2rem(40);
+        width: 36.7%;
+        height: 59.2%;
         // background-color: red;
         @include fj();
         div {
@@ -68,57 +69,25 @@ export default {
             align-items: center;
             cursor: pointer;
             a {
-                @include fontSize(28);
-                color: white;
+                @include fontSize(30);
+                color: #666666;
             }
 
         }
         .active {
             a {
-                color: #ffdaaa;
+                color: #c7ad8b;
             }
         }
         .noActive {
             a {
-                color: white;
+                color: #666666;
             }
         }
         #around {
             border-right: px2rem(2) solid #c9c9c9;;
         }
     }
-    // .chooseType {
-    //     width: px2rem(1098);
-    //     height: px2rem(86);
-    //     margin-left: transverse(121);
-    //     @include fj(center);
-    //     .chooseSmall {
-    //         width: px2rem(250);
-    //         height: 100%;
-    //         @include fj();
-    //         align-items: flex-end;
-    //         div {
-    //             width: px2rem(110);
-    //             height: px2rem(40);
-    //             @include fj(center);
-    //             align-items: center;
-    //             cursor: pointer;
-    //         }
-    //         .noActive {
-    //             border: px2rem(1) solid #fdbAAA;
-    //             background-color: #121212;
-    //             a {
-    //                 @include sc(px2rem(20));
-    //             }
-    //         }
-    //         .active {
-    //             background-color: #FFDAAA;
-    //             border: px2rem(1) solid #121212;
-    //             a {
-    //                 @include sc(px2rem(20), #121212);
-    //             }    
-    //         }
-    //     }
-    // }
+
 }     
 </style>

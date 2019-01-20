@@ -1,12 +1,16 @@
 <template>
-  <div id="app">
+  <div id="app" >
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'app'
+    name: 'app',
+    data() {
+      return {
+      }
+    }
 }
 </script>
 <style lang="scss" scoped>
